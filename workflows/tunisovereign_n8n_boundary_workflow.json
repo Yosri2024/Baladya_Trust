@@ -1,0 +1,87 @@
+{
+  "name": "TuniSovereign-AI Natural Boundary Workflow (Open-Meteo Sync & Multi-Channel ZK Audit Alert)",
+  "nodes": [
+    {
+      "name": "Daily_06h00_OpenMeteo_Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "position": [
+        200,
+        200
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 6
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Fetch_Tunisian_Governorate_Weather_ET0",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        440,
+        200
+      ],
+      "parameters": {
+        "url": "https://api.open-meteo.com/v1/forecast?latitude=35.17&longitude=8.83&daily=et0_fao_evapotranspiration,temperature_2m_max&timezone=Africa%2FTunis",
+        "method": "GET"
+      }
+    },
+    {
+      "name": "Forward_External_Context_to_Django_REST",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        680,
+        200
+      ],
+      "parameters": {
+        "url": "http://localhost:8000/api/v1/external-context/",
+        "method": "POST"
+      }
+    },
+    {
+      "name": "Django_Outbound_ZK_Settlement_Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "position": [
+        200,
+        420
+      ],
+      "parameters": {
+        "path": "tunisovereign-zk-event",
+        "httpMethod": "POST"
+      }
+    },
+    {
+      "name": "Critical_Severity_or_Quota_Gate",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        440,
+        420
+      ],
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json.severity}}",
+              "value2": "CRITICAL"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Dispatch_Darja_Operator_Alert_and_Auditor_ZK_Receipt",
+      "type": "n8n-nodes-base.noOp",
+      "position": [
+        680,
+        420
+      ],
+      "parameters": {}
+    }
+  ],
+  "connections": {}
+}

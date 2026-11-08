@@ -1,0 +1,30 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Environment variables & secrets
+.env
+*.env.local
+
+# Django / SQLite / Media
+*.log
+db.sqlite3
+media/
+staticfiles/
+
+# Foundry / Solidity artifacts
+cache/
+out/
+broadcast/
+
+# OS & IDE files
+.DS_Store
+.vscode/
+.idea/
+*.swp

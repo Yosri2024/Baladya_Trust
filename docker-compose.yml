@@ -1,0 +1,44 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-tunisovereign_db}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  anvil-blockchain:
+    image: ghcr.io/foundry-rs/foundry:latest
+    entrypoint: ["anvil", "--host", "0.0.0.0", "--port", "8545", "--block-time", "2"]
+    ports:
+      - "8545:8545"
+
+  dashboard:
+    build: .
+    command: streamlit run dashboard/streamlit_command_center.py --server.port 8501 --server.address 0.0.0.0
+    env_file:
+      - .env.example
+    ports:
+      - "8501:8501"
+    depends_on:
+      - db
+      - redis
+      - anvil-blockchain
+
+  n8n-boundary:
+    image: docker.n8n.io/n8nio/n8n:latest
+    environment:
+      - N8N_PORT=5678
+      - GENERIC_TIMEZONE=Africa/Tunis
+    ports:
+      - "5678:5678"
+    volumes:
+      - ./workflows:/home/node/.n8n/workflows

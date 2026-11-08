@@ -1,0 +1,32 @@
+syntax = "proto3";
+package tunisovereign;
+
+service TelemetryIngestService {
+  rpc StreamTelemetry (stream TelemetryPacket) returns (IngestAck);
+  rpc TriggerUrgentAudit (AuditRequest) returns (AuditResponse);
+}
+
+message TelemetryPacket {
+  string node_code = 1;
+  string governorate = 2;
+  string metric_type = 3;
+  double value = 4;
+  string iso_timestamp = 5;
+  string signature_hmac = 6;
+}
+
+message IngestAck {
+  int32 accepted_count = 1;
+  bool anomaly_triggered = 2;
+  string agent_thread_id = 3;
+}
+
+message AuditRequest {
+  string node_code = 1;
+  string reason = 2;
+}
+
+message AuditResponse {
+  string status = 1;
+  string tx_hash = 2;
+}
