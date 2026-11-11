@@ -1,69 +1,120 @@
-from django.db import models
-from django.contrib.auth.models import AbstractUser
 import uuid
+
+from django.contrib.auth.models import AbstractUser
+from django.db import models
 
 
 class StakeholderUser(AbstractUser):
     class Role(models.TextChoices):
-        COOP_MEMBER = "COOP_MEMBER", "Farmer / Citizen / Field Operator"
-        REGIONAL_AUDITOR = "REGIONAL_AUDITOR", "Regional GDA / PCT / Municipal Auditor"
-        NATIONAL_ADMIN = "NATIONAL_ADMIN", "Governorate / National Ministry Admin"
-        AGENT_SERVICE = "AGENT_SERVICE", "Autonomous AI Agent & MCP Service Account"
+        CITIZEN = "CITIZEN", "Citoyen de la municipalité"
+        MUNICIPAL_AUDITOR = "MUNICIPAL_AUDITOR", "Auditeur municipal"
+        NATIONAL_ADMIN = "NATIONAL_ADMIN", "Admin ministère / gouvernorat"
+        AGENT_SERVICE = "AGENT_SERVICE", "Agent IA et compte MCP"
 
-    role = models.CharField(max_length=24, choices=Role.choices, default=Role.COOP_MEMBER)
-    governorate = models.CharField(max_length=64, db_index=True, default="Kasserine")
+    role = models.CharField(max_length=24, choices=Role.choices, default=Role.CITIZEN)
+    municipality = models.CharField(max_length=64, db_index=True, default="Kasserine")
     wallet_address = models.CharField(max_length=42, blank=True, null=True)
+    residency_commitment = models.CharField(max_length=66, blank=True)
     preferred_dialect = models.CharField(max_length=16, default="ar-TN")
 
 
-class CooperativeUnit(models.Model):
+class Municipality(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=120)
     governorate = models.CharField(max_length=64, db_index=True)
-    track_domain = models.CharField(max_length=64, default="Track_01_Water_Agri")
-    daily_quota_limit = models.FloatField(help_text="Max daily resource/water/medicine quota")
+    total_budget_tnd = models.FloatField()
+    matching_pool_tnd = models.FloatField()
     contract_address = models.CharField(max_length=42, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.name} ({self.governorate})"
 
 
-class ResourceNodePlot(models.Model):
-    coop = models.ForeignKey(CooperativeUnit, on_delete=models.CASCADE, related_name="nodes")
-    owner = models.ForeignKey(StakeholderUser, on_delete=models.CASCADE, related_name="owned_nodes")
-    node_code = models.CharField(max_length=32, unique=True)
-    crop_or_sector_type = models.CharField(max_length=64)
-    allocated_share_pct = models.FloatField(default=10.0)
-    is_valve_or_dispatch_active = models.BooleanField(default=False)
+class Proposal(models.Model):
+    class Category(models.TextChoices):
+        ROAD = "ROAD", "Route"
+        LIGHTING = "LIGHTING", "Éclairage"
+        SCHOOL = "SCHOOL", "École"
+        WASTE = "WASTE", "Déchets"
+
+    class Status(models.TextChoices):
+        SUBMITTED = "SUBMITTED", "Soumis"
+        MERGED = "MERGED", "Fusionné"
+        FUNDED = "FUNDED", "Financé"
+        IN_PROGRESS = "IN_PROGRESS", "En cours"
+        COMPLETED = "COMPLETED", "Terminé"
+        BLOCKED = "BLOCKED", "Bloqué"
+
+    municipality = models.ForeignKey(Municipality, on_delete=models.CASCADE, related_name="proposals")
+    author = models.ForeignKey(StakeholderUser, on_delete=models.CASCADE, related_name="proposals")
+    project_code = models.CharField(max_length=32, unique=True)
+    title = models.CharField(max_length=160)
+    text = models.TextField()
+    language = models.CharField(max_length=8, default="ar-TN")
+    category = models.CharField(max_length=16, choices=Category.choices)
+    cluster_id = models.CharField(max_length=32, blank=True, db_index=True)
+    estimated_cost_tnd = models.FloatField(default=0.0)
+    status = models.CharField(max_length=16, choices=Status.choices, default=Status.SUBMITTED)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+
+    class Meta:
+        indexes = [models.Index(fields=["municipality", "status", "-created_at"])]
+
+    def __str__(self):
+        return f"{self.project_code} - {self.title}"
 
 
-class TelemetryReading(models.Model):
-    class MetricType(models.TextChoices):
-        SOIL_MOISTURE = "MOISTURE", "Soil Moisture (%)"
-        AQUIFER_FLOW = "FLOW", "Flow / Dispensation Rate (L/min or Units/h)"
-        TEMPERATURE = "TEMP", "Ambient / Cold-Chain Temperature (C)"
-        PRESSURE_OR_STOCK = "STOCK", "Piezo Pressure / Inventory Level"
+class Vote(models.Model):
+    proposal = models.ForeignKey(Proposal, on_delete=models.CASCADE, related_name="votes")
+    voter_hash = models.CharField(max_length=66, db_index=True)
+    amount_tnd = models.FloatField()
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
 
-    node = models.ForeignKey(ResourceNodePlot, on_delete=models.CASCADE, related_name="readings")
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=["proposal", "voter_hash"], name="one_vote")]
+        indexes = [models.Index(fields=["proposal", "-created_at"])]
+
+
+class MilestoneReport(models.Model):
+    proposal = models.ForeignKey(Proposal, on_delete=models.CASCADE, related_name="milestones")
     timestamp = models.DateTimeField(db_index=True)
-    metric_type = models.CharField(max_length=16, choices=MetricType.choices)
-    value = models.FloatField()
+    progress_pct = models.FloatField()
+    paid_pct = models.FloatField()
+    photo_hash = models.CharField(max_length=64)
+    latitude = models.FloatField()
+    longitude = models.FloatField()
     ingestion_protocol = models.CharField(max_length=16, default="gRPC")
 
     class Meta:
-        indexes = [models.Index(fields=["node", "metric_type", "-timestamp"])]
+        indexes = [models.Index(fields=["proposal", "-timestamp"])]
 
 
-class AnomalyAndForecastEvent(models.Model):
+class Tranche(models.Model):
+    proposal = models.ForeignKey(Proposal, on_delete=models.CASCADE, related_name="tranches")
+    index = models.PositiveSmallIntegerField()
+    amount_tnd = models.FloatField()
+    released_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=["proposal", "index"], name="uniq_tranche")]
+
+
+class AnomalyEvent(models.Model):
+    class Kind(models.TextChoices):
+        SYBIL_VOTES = "SYBIL_VOTES", "Votes sybil"
+        PROGRESS_LAG = "PROGRESS_LAG", "Retard de chantier"
+        DUPLICATE_PHOTO = "DUPLICATE_PHOTO", "Photo réutilisée"
+
     class Severity(models.TextChoices):
-        LOW = "LOW", "Low"
-        MEDIUM = "MEDIUM", "Medium"
-        CRITICAL = "CRITICAL", "Critical Breach / Leak / Diversion"
+        LOW = "LOW", "Faible"
+        MEDIUM = "MEDIUM", "Moyenne"
+        CRITICAL = "CRITICAL", "Critique"
 
-    node = models.ForeignKey(ResourceNodePlot, on_delete=models.CASCADE, related_name="anomalies")
-    detected_at = models.DateTimeField(auto_now_add=True)
-    anomaly_type = models.CharField(max_length=64)
+    proposal = models.ForeignKey(Proposal, on_delete=models.CASCADE, related_name="anomalies")
+    detected_at = models.DateTimeField(auto_now_add=True, db_index=True)
+    kind = models.CharField(max_length=24, choices=Kind.choices)
     severity = models.CharField(max_length=16, choices=Severity.choices)
     isolation_forest_score = models.FloatField()
-    forecasted_deficit_24h = models.FloatField(default=0.0)
 
 
 class AgentLoopExecution(models.Model):
@@ -79,7 +130,12 @@ class AgentLoopExecution(models.Model):
 
 
 class OnChainZKReceipt(models.Model):
-    agent_execution = models.OneToOneField(AgentLoopExecution, on_delete=models.CASCADE, related_name="zk_receipt")
+    agent_execution = models.OneToOneField(
+        AgentLoopExecution, on_delete=models.CASCADE, related_name="zk_receipt"
+    )
+    tranche = models.ForeignKey(
+        Tranche, on_delete=models.SET_NULL, related_name="zk_receipts", null=True, blank=True
+    )
     zk_commitment_hash = models.CharField(max_length=66, unique=True)
     public_inputs_json = models.JSONField(default=dict)
     tx_hash = models.CharField(max_length=66, unique=True)

@@ -86,7 +86,7 @@ baladiya-trust/
 │   ├── api_rest.py                 # DRF ViewSets, JWT auth, Darja webhook
 │   ├── schema_graphql.py           # Strawberry schema + real DataLoader
 │   └── ml_anomaly.py               # IsolationForest + rolling z-score + P/R/F1
-├── config/                         # Django project (to be created)
+├── config/                         # Django project (settings, ASGI, root URLs)
 ├── contracts/
 │   ├── BaladiyaLedger.sol          # Tranche release + soulbound voter registry
 │   ├── web3_zk_client.py           # Real Web3.py transactions (to replace simulated tx)
@@ -109,17 +109,24 @@ baladiya-trust/
 
 _Last updated: 2026-11-11_
 
-The repository currently contains the **unmodified course starter** (Track 1 water/agriculture
-stubs). No Baladiya-Trust functionality has been implemented yet.
+The repository now has a runnable Django foundation for Baladiya-Trust: Track 4 models are migrated
+on PostgreSQL, JWT authentication and role-based permissions are wired, and the first REST endpoints
+are in place. The remaining starter modules (GraphQL, gRPC, simulator, ML, MCP, skills, LangGraph,
+contracts, dashboard) are still Track 1 stubs and are being adapted next.
 
 | Area | Status | Notes |
 | :--- | :---: | :--- |
 | Fork + local clone + upstream remote | Done | `origin` = Yosri2024 fork, `upstream` = professor repo |
 | Environment check | Done | Python 3.14.10, Docker 29.9.3, Compose v5.5.1 |
-| Django project scaffold (`config/`, `manage.py`, apps, migrations) | Not started | Guide §5.1 |
-| Track 4 models (`Municipality`, `Proposal`, `Vote`, `MilestoneReport`, `Tranche`, …) | Not started | Guide §5.2 |
-| JWT auth + 4-role RBAC + register | Not started | Guide §5.3 |
-| REST ViewSets, filters, validation | Not started | Guide §5.3 |
+| Python venv + dependencies | Done | `.venv` recreated; imports verified; no torch/CUDA |
+| Docker Postgres + Redis | Done | `postgres:16-alpine`, `redis:7-alpine` running |
+| `sentence-transformers` | Deferred | Pulls PyTorch + CUDA (~several GB); TF-IDF fallback planned for week 2 |
+| `mcp` dependency | Pinned `<2` | Guide uses the 1.x `FastMCP` API (`mcp.server.fastmcp`) |
+| Django project scaffold (`config/`, `manage.py`, apps, migrations) | Done | Guide §5.1 |
+| Track 4 models (`Municipality`, `Proposal`, `Vote`, `MilestoneReport`, `Tranche`, …) | Done | Guide §5.2; initial migration applied |
+| JWT auth + 4-role RBAC + register | Done | Guide §5.3; claims `role`, `municipality`, `wallet_address` |
+| REST ViewSets, filters, validation | Done | Guide §5.3; django-filter, search and ordering |
+| Darja webhook authentication | Done | JWT (`AGENT_SERVICE`) or `X-N8N-Secret` header |
 | Strawberry GraphQL + real DataLoader | Not started | Guide §5.4 |
 | gRPC `baladiya.proto` + registered servicer | Not started | Guide §5.5 |
 | Simulator + anomaly injection + labels CSV | Not started | Guide §5.6 |
@@ -137,13 +144,14 @@ stubs). No Baladiya-Trust functionality has been implemented yet.
 
 ### Week 1 — Django foundation and three APIs (Nov 10–17)
 
-- [ ] Create `config/` project, `apps.py`, `__init__.py` files, PostgreSQL settings.
-- [ ] Rewrite `models.py` for Baladiya-Trust, run migrations.
+- [x] Create `config/` project, `apps.py`, `__init__.py` files, PostgreSQL settings.
+- [x] Rewrite `models.py` for Baladiya-Trust, run migrations.
 - [ ] Draw UML class diagram and proposal-to-payout sequence diagram.
-- [ ] Implement register/login/refresh JWT with `role`, `municipality`, `wallet_address`.
-- [ ] Implement `IsCitizen`, `IsMunicipalAuditor`, `IsNationalAdmin`; test 200 vs 403.
-- [ ] Implement DRF ViewSets for proposals, votes, milestones, anomalies, receipts.
-- [ ] Fix Darja webhook authentication (no `AllowAny`).
+- [x] Implement register/login/refresh JWT with `role`, `municipality`, `wallet_address`.
+- [x] Implement `IsCitizen`, `IsMunicipalAuditor`, `IsNationalAdmin`.
+- [ ] Test 200 vs 403 for each role.
+- [x] Implement DRF ViewSets for proposals, votes, milestones, anomalies, receipts.
+- [x] Fix Darja webhook authentication (no `AllowAny`).
 - [ ] Implement nested GraphQL schema and real DataLoader; test query count.
 - [ ] Create `baladiya.proto`, generate stubs, register `MilestoneIngestServiceServicer`.
 - [ ] Integration check: register, login, proposal, GraphQL query, gRPC packet. Tag `v0.1`.
@@ -181,25 +189,33 @@ stubs). No Baladiya-Trust functionality has been implemented yet.
 - [ ] Record 5–10 min demo video, prepare `.pptx` and `.pdf` slides.
 - [ ] Submit archive to `homework.isg@gmail.com` before the deadline.
 
-## Getting started (work in progress)
-
-The Django project is not created yet. Once the scaffold from Guide §5.1 is in place, the target
-startup procedure will be:
+## Getting started
 
 ```bash
 cp .env.example .env        # never commit .env
-docker compose up --build
-```
+docker compose up -d db redis
 
-Local development:
-
-```bash
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 python manage.py migrate
 python manage.py runserver
 ```
+
+Implemented endpoints so far:
+
+| Method | Endpoint | Auth |
+| :--- | :--- | :--- |
+| `GET` | `/health/` | Public |
+| `POST` | `/api/auth/register/` | Public (creates a `CITIZEN`) |
+| `POST` | `/api/auth/token/` | Username + password |
+| `POST` | `/api/auth/token/refresh/` | Refresh token |
+| `CRUD` | `/api/v1/municipalities/`, `/proposals/`, `/votes/`, `/milestones/`, `/tranches/` | JWT |
+| `GET` | `/api/v1/anomalies/`, `/zk-receipts/` | JWT + role |
+| `POST` | `/api/v1/darja-intent/` | `AGENT_SERVICE` JWT or `X-N8N-Secret` |
+
+Docker Compose currently starts the database services only; the backend, gRPC, Anvil, n8n and
+dashboard services will be added in week 4 (Guide §5.12).
 
 ## Tests
 
