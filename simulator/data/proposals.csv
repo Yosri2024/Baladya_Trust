@@ -1,0 +1,201 @@
+project_code,municipality,governorate,latitude,longitude,title,text,language,category,cluster_id,locality,estimated_cost_tnd,author_username,is_duplicate
+SIM-0000,Tunis,Tunis,36.8065,10.1815,Road - Sbeitla,إصلاح طريق Sbeitla,ar-TN,ROAD,CL-000,Sbeitla,113058.9,sim_citizen_00,False
+SIM-0001,Sidi_Bouzid,Sidi_Bouzid,35.0382,9.4849,Road - Regueb,aslah triq Regueb,fr,ROAD,CL-001,Regueb,32077.42,sim_citizen_01,False
+SIM-0002,Kasserine,Kasserine,35.1676,8.8365,Lighting - Cherarda,Éclairage public à Cherarda,fr,LIGHTING,CL-002,Cherarda,233273.12,sim_citizen_02,False
+SIM-0003,Tunis,Tunis,36.8065,10.1815,Waste - Cherarda,ramy el zbel fi Cherarda,fr,WASTE,CL-003,Cherarda,243920.96,sim_citizen_03,False
+SIM-0004,Kasserine,Kasserine,35.1676,8.8365,Lighting - Haffouz,إنارة الشوارع في Haffouz,ar-TN,LIGHTING,CL-004,Haffouz,125591.11,sim_citizen_04,False
+SIM-0005,Sidi_Bouzid,Sidi_Bouzid,35.0382,9.4849,School - Regueb,Rénover l'école de Regueb,fr,SCHOOL,CL-005,Regueb,164372.37,sim_citizen_05,False
+SIM-0006,Gafsa,Gafsa,34.425,8.7842,School - Nefta,Rénover l'école de Nefta,fr,SCHOOL,CL-006,Nefta,297298.08,sim_citizen_06,False
+SIM-0007,Tozeur,Tozeur,33.9197,8.1335,Road - Haffouz,Réparer la route de Haffouz,fr,ROAD,CL-007,Haffouz,229775.44,sim_citizen_07,False
+SIM-0008,Tunis,Tunis,36.8065,10.1815,School - Cherarda,Rénover l'école de Cherarda,fr,SCHOOL,CL-008,Cherarda,37413.27,sim_citizen_08,False
+SIM-0009,Sidi_Bouzid,Sidi_Bouzid,35.0382,9.4849,School - Regueb,islah el madrasa fi Regueb,fr,SCHOOL,CL-009,Regueb,349263.79,sim_citizen_09,False
+SIM-0010,Kairouan,Kairouan,35.6781,10.0963,School - Jelma,ترميم مدرسة Jelma,ar-TN,SCHOOL,CL-010,Jelma,81808.56,sim_citizen_10,False
+SIM-0011,Gafsa,Gafsa,34.425,8.7842,Lighting - Nefta,Éclairage public à Nefta,fr,LIGHTING,CL-011,Nefta,251469.78,sim_citizen_11,False
+SIM-0012,Sidi_Bouzid,Sidi_Bouzid,35.0382,9.4849,Lighting - Metlaoui,daw el charea fi Metlaoui,fr,LIGHTING,CL-012,Metlaoui,164193.07,sim_citizen_12,False
+SIM-0013,Tunis,Tunis,36.8065,10.1815,Lighting - Le Kram,Éclairage public à Le Kram,fr,LIGHTING,CL-013,Le Kram,107038.27,sim_citizen_13,False
+SIM-0014,Kasserine,Kasserine,35.1676,8.8365,School - Haffouz,ترميم مدرسة Haffouz,ar-TN,SCHOOL,CL-014,Haffouz,45151.67,sim_citizen_14,False
+SIM-0015,Tozeur,Tozeur,33.9197,8.1335,School - Cherarda,tajdid el madrasa fi Cherarda,fr,SCHOOL,CL-015,Cherarda,170340.12,sim_citizen_15,False
+SIM-0016,Tunis,Tunis,36.8065,10.1815,Waste - Metlaoui,نظافة Metlaoui,ar-TN,WASTE,CL-016,Metlaoui,73059.52,sim_citizen_16,False
+SIM-0017,Tunis,Tunis,36.8065,10.1815,School - Haffouz,tajdid el madrasa fi Haffouz,fr,SCHOOL,CL-017,Haffouz,157558.65,sim_citizen_17,False
+SIM-0018,Sidi_Bouzid,Sidi_Bouzid,35.0382,9.4849,Waste - Regueb,Collecte des déchets à Regueb,fr,WASTE,CL-018,Regueb,347219.11,sim_citizen_18,False
+SIM-0019,Sidi_Bouzid,Sidi_Bouzid,35.0382,9.4849,Lighting - Haffouz,Éclairage public à Haffouz,fr,LIGHTING,CL-019,Haffouz,166211.58,sim_citizen_19,False
+SIM-0020,Tozeur,Tozeur,33.9197,8.1335,Waste - Nefta,Collecte des déchets à Nefta,fr,WASTE,CL-020,Nefta,278507.7,sim_citizen_20,False
+SIM-0021,Kasserine,Kasserine,35.1676,8.8365,School - Le Kram,Rénover l'école de Le Kram,fr,SCHOOL,CL-021,Le Kram,131530.05,sim_citizen_21,False
+SIM-0022,Sidi_Bouzid,Sidi_Bouzid,35.0382,9.4849,Waste - Sbeitla,نظافة Sbeitla,ar-TN,WASTE,CL-022,Sbeitla,389317.48,sim_citizen_22,False
+SIM-0023,Sidi_Bouzid,Sidi_Bouzid,35.0382,9.4849,Road - Nefta,tarmim triq Nefta,fr,ROAD,CL-023,Nefta,78078.92,sim_citizen_23,False
+SIM-0024,Sidi_Bouzid,Sidi_Bouzid,35.0382,9.4849,Road - Le Kram,aslah triq Le Kram,fr,ROAD,CL-024,Le Kram,27401.16,sim_citizen_24,False
+SIM-0025,Gafsa,Gafsa,34.425,8.7842,School - Cherarda,Rénover l'école de Cherarda,fr,SCHOOL,CL-025,Cherarda,111531.21,sim_citizen_25,False
+SIM-0026,Tozeur,Tozeur,33.9197,8.1335,Road - Regueb,aslah triq Regueb,fr,ROAD,CL-026,Regueb,330088.84,sim_citizen_26,False
+SIM-0027,Tozeur,Tozeur,33.9197,8.1335,Lighting - Metlaoui,daw el charea fi Metlaoui,fr,LIGHTING,CL-027,Metlaoui,379802.5,sim_citizen_27,False
+SIM-0028,Sidi_Bouzid,Sidi_Bouzid,35.0382,9.4849,School - Haffouz,islah el madrasa fi Haffouz,fr,SCHOOL,CL-028,Haffouz,372987.13,sim_citizen_28,False
+SIM-0029,Tunis,Tunis,36.8065,10.1815,Lighting - Nefta,daw el charea fi Nefta,fr,LIGHTING,CL-029,Nefta,398156.76,sim_citizen_29,False
+SIM-0030,Tunis,Tunis,36.8065,10.1815,School - Jelma,tajdid el madrasa fi Jelma,fr,SCHOOL,CL-030,Jelma,65981.59,sim_citizen_30,False
+SIM-0031,Sidi_Bouzid,Sidi_Bouzid,35.0382,9.4849,Road - Le Kram,Réparer la route de Le Kram,fr,ROAD,CL-031,Le Kram,243557.31,sim_citizen_31,False
+SIM-0032,Sidi_Bouzid,Sidi_Bouzid,35.0382,9.4849,Lighting - Sbeitla,Éclairage public à Sbeitla,fr,LIGHTING,CL-032,Sbeitla,288979.56,sim_citizen_32,False
+SIM-0033,Kasserine,Kasserine,35.1676,8.8365,Lighting - Regueb,Éclairage public à Regueb,fr,LIGHTING,CL-033,Regueb,346661.45,sim_citizen_33,False
+SIM-0034,Kasserine,Kasserine,35.1676,8.8365,Lighting - Nefta,daw el charea fi Nefta,fr,LIGHTING,CL-034,Nefta,101409.99,sim_citizen_34,False
+SIM-0035,Sidi_Bouzid,Sidi_Bouzid,35.0382,9.4849,Waste - Cherarda,ramy el zbel fi Cherarda,fr,WASTE,CL-035,Cherarda,326848.86,sim_citizen_35,False
+SIM-0036,Sidi_Bouzid,Sidi_Bouzid,35.0382,9.4849,Road - Regueb,aslah triq Regueb,fr,ROAD,CL-036,Regueb,154633.08,sim_citizen_36,False
+SIM-0037,Kairouan,Kairouan,35.6781,10.0963,Waste - Sbeitla,Collecte des déchets à Sbeitla,fr,WASTE,CL-037,Sbeitla,43032.82,sim_citizen_37,False
+SIM-0038,Tunis,Tunis,36.8065,10.1815,School - Regueb,islah el madrasa fi Regueb,fr,SCHOOL,CL-038,Regueb,92804.23,sim_citizen_38,False
+SIM-0039,Tozeur,Tozeur,33.9197,8.1335,Waste - Metlaoui,ramy el zbel fi Metlaoui,fr,WASTE,CL-039,Metlaoui,89725.45,sim_citizen_39,False
+SIM-0040,Kairouan,Kairouan,35.6781,10.0963,Lighting - Regueb,daw el charea fi Regueb,fr,LIGHTING,CL-040,Regueb,327048.45,sim_citizen_00,False
+SIM-0041,Tozeur,Tozeur,33.9197,8.1335,Road - Sbeitla,Réparer la route de Sbeitla,fr,ROAD,CL-041,Sbeitla,388218.58,sim_citizen_01,False
+SIM-0042,Sidi_Bouzid,Sidi_Bouzid,35.0382,9.4849,Lighting - Haffouz,daw el charea fi Haffouz,fr,LIGHTING,CL-042,Haffouz,202916.2,sim_citizen_02,False
+SIM-0043,Kairouan,Kairouan,35.6781,10.0963,Road - Metlaoui,aslah triq Metlaoui,fr,ROAD,CL-043,Metlaoui,20819.04,sim_citizen_03,False
+SIM-0044,Kairouan,Kairouan,35.6781,10.0963,School - Jelma,ترميم مدرسة Jelma,ar-TN,SCHOOL,CL-044,Jelma,180742.84,sim_citizen_04,False
+SIM-0045,Tunis,Tunis,36.8065,10.1815,Waste - Metlaoui,tanzif Metlaoui,fr,WASTE,CL-045,Metlaoui,132748.97,sim_citizen_05,False
+SIM-0046,Kasserine,Kasserine,35.1676,8.8365,Road - Le Kram,Réparer la route de Le Kram,fr,ROAD,CL-046,Le Kram,39054.09,sim_citizen_06,False
+SIM-0047,Kairouan,Kairouan,35.6781,10.0963,Lighting - Sbeitla,Éclairage public à Sbeitla,fr,LIGHTING,CL-047,Sbeitla,343510.17,sim_citizen_07,False
+SIM-0048,Kasserine,Kasserine,35.1676,8.8365,Road - Cherarda,aslah triq Cherarda,fr,ROAD,CL-048,Cherarda,65556.91,sim_citizen_08,False
+SIM-0049,Tozeur,Tozeur,33.9197,8.1335,Lighting - Sbeitla,Éclairage public à Sbeitla,fr,LIGHTING,CL-049,Sbeitla,179305.47,sim_citizen_09,False
+SIM-0050,Tozeur,Tozeur,33.9197,8.1335,School - Nefta,islah el madrasa fi Nefta,fr,SCHOOL,CL-050,Nefta,274495.87,sim_citizen_10,False
+SIM-0051,Gafsa,Gafsa,34.425,8.7842,Lighting - Nefta,daw el charea fi Nefta,fr,LIGHTING,CL-051,Nefta,69733.75,sim_citizen_11,False
+SIM-0052,Tunis,Tunis,36.8065,10.1815,School - Jelma,ترميم مدرسة Jelma,ar-TN,SCHOOL,CL-052,Jelma,373026.97,sim_citizen_12,False
+SIM-0053,Kasserine,Kasserine,35.1676,8.8365,Road - Jelma,Réparer la route de Jelma,fr,ROAD,CL-053,Jelma,47839.07,sim_citizen_13,False
+SIM-0054,Sidi_Bouzid,Sidi_Bouzid,35.0382,9.4849,School - Metlaoui,ترميم مدرسة Metlaoui,ar-TN,SCHOOL,CL-054,Metlaoui,354728.39,sim_citizen_14,False
+SIM-0055,Sidi_Bouzid,Sidi_Bouzid,35.0382,9.4849,School - Nefta,islah el madrasa fi Nefta,fr,SCHOOL,CL-055,Nefta,186510.14,sim_citizen_15,False
+SIM-0056,Tozeur,Tozeur,33.9197,8.1335,School - Sbeitla,ترميم مدرسة Sbeitla,ar-TN,SCHOOL,CL-056,Sbeitla,374067.29,sim_citizen_16,False
+SIM-0057,Kasserine,Kasserine,35.1676,8.8365,Lighting - Nefta,Éclairage public à Nefta,fr,LIGHTING,CL-057,Nefta,358090.83,sim_citizen_17,False
+SIM-0058,Tunis,Tunis,36.8065,10.1815,Lighting - Nefta,إنارة الشوارع في Nefta,ar-TN,LIGHTING,CL-058,Nefta,249835.33,sim_citizen_18,False
+SIM-0059,Tunis,Tunis,36.8065,10.1815,School - Cherarda,ترميم مدرسة Cherarda,ar-TN,SCHOOL,CL-059,Cherarda,212055.44,sim_citizen_19,False
+SIM-0060,Gafsa,Gafsa,34.425,8.7842,Road - Regueb,aslah triq Regueb,fr,ROAD,CL-060,Regueb,335152.27,sim_citizen_20,False
+SIM-0061,Kasserine,Kasserine,35.1676,8.8365,Road - Le Kram,tarmim triq Le Kram,fr,ROAD,CL-061,Le Kram,262103.08,sim_citizen_21,False
+SIM-0062,Gafsa,Gafsa,34.425,8.7842,Lighting - Jelma,daw el charea fi Jelma,fr,LIGHTING,CL-062,Jelma,233144.61,sim_citizen_22,False
+SIM-0063,Kasserine,Kasserine,35.1676,8.8365,Road - Metlaoui,Réparer la route de Metlaoui,fr,ROAD,CL-063,Metlaoui,337146.11,sim_citizen_23,False
+SIM-0064,Tozeur,Tozeur,33.9197,8.1335,Lighting - Haffouz,tajdid el daw fi Haffouz,fr,LIGHTING,CL-064,Haffouz,35894.97,sim_citizen_24,False
+SIM-0065,Gafsa,Gafsa,34.425,8.7842,Road - Le Kram,tarmim triq Le Kram,fr,ROAD,CL-065,Le Kram,279185.34,sim_citizen_25,False
+SIM-0066,Tunis,Tunis,36.8065,10.1815,Road - Le Kram,aslah triq Le Kram,fr,ROAD,CL-066,Le Kram,390058.07,sim_citizen_26,False
+SIM-0067,Tunis,Tunis,36.8065,10.1815,Lighting - Cherarda,tajdid el daw fi Cherarda,fr,LIGHTING,CL-067,Cherarda,390958.29,sim_citizen_27,False
+SIM-0068,Sidi_Bouzid,Sidi_Bouzid,35.0382,9.4849,Waste - Sbeitla,tanzif Sbeitla,fr,WASTE,CL-068,Sbeitla,299894.5,sim_citizen_28,False
+SIM-0069,Gafsa,Gafsa,34.425,8.7842,Waste - Cherarda,نظافة Cherarda,ar-TN,WASTE,CL-069,Cherarda,80495.18,sim_citizen_29,False
+SIM-0070,Tunis,Tunis,36.8065,10.1815,Road - Haffouz,Réparer la route de Haffouz,fr,ROAD,CL-070,Haffouz,346265.44,sim_citizen_30,False
+SIM-0071,Sidi_Bouzid,Sidi_Bouzid,35.0382,9.4849,Lighting - Jelma,إنارة الشوارع في Jelma,ar-TN,LIGHTING,CL-071,Jelma,135972.53,sim_citizen_31,False
+SIM-0072,Sidi_Bouzid,Sidi_Bouzid,35.0382,9.4849,Lighting - Sbeitla,tajdid el daw fi Sbeitla,fr,LIGHTING,CL-072,Sbeitla,171417.07,sim_citizen_32,False
+SIM-0073,Gafsa,Gafsa,34.425,8.7842,Road - Nefta,إصلاح طريق Nefta,ar-TN,ROAD,CL-073,Nefta,263763.06,sim_citizen_33,False
+SIM-0074,Kairouan,Kairouan,35.6781,10.0963,School - Sbeitla,Rénover l'école de Sbeitla,fr,SCHOOL,CL-074,Sbeitla,353274.6,sim_citizen_34,False
+SIM-0075,Gafsa,Gafsa,34.425,8.7842,Lighting - Nefta,Éclairage public à Nefta,fr,LIGHTING,CL-075,Nefta,61192.97,sim_citizen_35,False
+SIM-0076,Kairouan,Kairouan,35.6781,10.0963,School - Le Kram,tajdid el madrasa fi Le Kram,fr,SCHOOL,CL-076,Le Kram,250359.36,sim_citizen_36,False
+SIM-0077,Tozeur,Tozeur,33.9197,8.1335,Road - Haffouz,tarmim triq Haffouz,fr,ROAD,CL-077,Haffouz,116794.55,sim_citizen_37,False
+SIM-0078,Tunis,Tunis,36.8065,10.1815,Waste - Sbeitla,tanzif Sbeitla,fr,WASTE,CL-078,Sbeitla,158404.16,sim_citizen_38,False
+SIM-0079,Kasserine,Kasserine,35.1676,8.8365,School - Le Kram,Rénover l'école de Le Kram,fr,SCHOOL,CL-079,Le Kram,293506.62,sim_citizen_39,False
+SIM-0080,Gafsa,Gafsa,34.425,8.7842,School - Haffouz,ترميم مدرسة Haffouz,ar-TN,SCHOOL,CL-080,Haffouz,172912.15,sim_citizen_00,False
+SIM-0081,Gafsa,Gafsa,34.425,8.7842,Lighting - Cherarda,daw el charea fi Cherarda,fr,LIGHTING,CL-081,Cherarda,272673.19,sim_citizen_01,False
+SIM-0082,Kairouan,Kairouan,35.6781,10.0963,Lighting - Nefta,daw el charea fi Nefta,fr,LIGHTING,CL-082,Nefta,228216.14,sim_citizen_02,False
+SIM-0083,Kasserine,Kasserine,35.1676,8.8365,School - Nefta,islah el madrasa fi Nefta,fr,SCHOOL,CL-083,Nefta,183357.5,sim_citizen_03,False
+SIM-0084,Tozeur,Tozeur,33.9197,8.1335,School - Jelma,tajdid el madrasa fi Jelma,fr,SCHOOL,CL-084,Jelma,188020.72,sim_citizen_04,False
+SIM-0085,Sidi_Bouzid,Sidi_Bouzid,35.0382,9.4849,Waste - Metlaoui,Collecte des déchets à Metlaoui,fr,WASTE,CL-085,Metlaoui,127838.83,sim_citizen_05,False
+SIM-0086,Tunis,Tunis,36.8065,10.1815,School - Regueb,islah el madrasa fi Regueb,fr,SCHOOL,CL-086,Regueb,275662.35,sim_citizen_06,False
+SIM-0087,Sidi_Bouzid,Sidi_Bouzid,35.0382,9.4849,Lighting - Metlaoui,Éclairage public à Metlaoui,fr,LIGHTING,CL-087,Metlaoui,37561.21,sim_citizen_07,False
+SIM-0088,Kairouan,Kairouan,35.6781,10.0963,Road - Jelma,aslah triq Jelma,fr,ROAD,CL-088,Jelma,356732.03,sim_citizen_08,False
+SIM-0089,Tozeur,Tozeur,33.9197,8.1335,Lighting - Haffouz,daw el charea fi Haffouz,fr,LIGHTING,CL-089,Haffouz,171868.09,sim_citizen_09,False
+SIM-0090,Sidi_Bouzid,Sidi_Bouzid,35.0382,9.4849,Road - Regueb,aslah triq Regueb,fr,ROAD,CL-090,Regueb,103159.63,sim_citizen_10,False
+SIM-0091,Tunis,Tunis,36.8065,10.1815,Waste - Sbeitla,tanzif Sbeitla,fr,WASTE,CL-091,Sbeitla,368638.61,sim_citizen_11,False
+SIM-0092,Kasserine,Kasserine,35.1676,8.8365,Waste - Metlaoui,ramy el zbel fi Metlaoui,fr,WASTE,CL-092,Metlaoui,273679.54,sim_citizen_12,False
+SIM-0093,Tozeur,Tozeur,33.9197,8.1335,School - Jelma,tajdid el madrasa fi Jelma,fr,SCHOOL,CL-093,Jelma,335616.28,sim_citizen_13,False
+SIM-0094,Tozeur,Tozeur,33.9197,8.1335,Waste - Metlaoui,ramy el zbel fi Metlaoui,fr,WASTE,CL-094,Metlaoui,191026.51,sim_citizen_14,False
+SIM-0095,Sidi_Bouzid,Sidi_Bouzid,35.0382,9.4849,School - Jelma,islah el madrasa fi Jelma,fr,SCHOOL,CL-095,Jelma,124347.03,sim_citizen_15,False
+SIM-0096,Kasserine,Kasserine,35.1676,8.8365,School - Cherarda,ترميم مدرسة Cherarda,ar-TN,SCHOOL,CL-096,Cherarda,147622.06,sim_citizen_16,False
+SIM-0097,Tozeur,Tozeur,33.9197,8.1335,Road - Metlaoui,tarmim triq Metlaoui,fr,ROAD,CL-097,Metlaoui,107879.36,sim_citizen_17,False
+SIM-0098,Tunis,Tunis,36.8065,10.1815,Lighting - Cherarda,Éclairage public à Cherarda,fr,LIGHTING,CL-098,Cherarda,177649.8,sim_citizen_18,False
+SIM-0099,Gafsa,Gafsa,34.425,8.7842,Waste - Haffouz,Collecte des déchets à Haffouz,fr,WASTE,CL-099,Haffouz,98597.07,sim_citizen_19,False
+SIM-0100,Kairouan,Kairouan,35.6781,10.0963,Waste - Sbeitla,ramy el zbel fi Sbeitla,fr,WASTE,CL-100,Sbeitla,201252.3,sim_citizen_20,False
+SIM-0101,Gafsa,Gafsa,34.425,8.7842,School - Haffouz,tajdid el madrasa fi Haffouz,fr,SCHOOL,CL-101,Haffouz,224523.82,sim_citizen_21,False
+SIM-0102,Tunis,Tunis,36.8065,10.1815,Lighting - Jelma,tajdid el daw fi Jelma,fr,LIGHTING,CL-102,Jelma,123715.42,sim_citizen_22,False
+SIM-0103,Kairouan,Kairouan,35.6781,10.0963,Road - Haffouz,إصلاح طريق Haffouz,ar-TN,ROAD,CL-103,Haffouz,274171.98,sim_citizen_23,False
+SIM-0104,Kairouan,Kairouan,35.6781,10.0963,Lighting - Jelma,tajdid el daw fi Jelma,fr,LIGHTING,CL-104,Jelma,392674.35,sim_citizen_24,False
+SIM-0105,Tozeur,Tozeur,33.9197,8.1335,Road - Haffouz,Réparer la route de Haffouz,fr,ROAD,CL-105,Haffouz,51900.04,sim_citizen_25,False
+SIM-0106,Kairouan,Kairouan,35.6781,10.0963,Lighting - Jelma,tajdid el daw fi Jelma,fr,LIGHTING,CL-106,Jelma,39108.16,sim_citizen_26,False
+SIM-0107,Kairouan,Kairouan,35.6781,10.0963,School - Cherarda,tajdid el madrasa fi Cherarda,fr,SCHOOL,CL-107,Cherarda,144201.41,sim_citizen_27,False
+SIM-0108,Kairouan,Kairouan,35.6781,10.0963,School - Haffouz,ترميم مدرسة Haffouz,ar-TN,SCHOOL,CL-108,Haffouz,337266.15,sim_citizen_28,False
+SIM-0109,Kairouan,Kairouan,35.6781,10.0963,Road - Sbeitla,إصلاح طريق Sbeitla,ar-TN,ROAD,CL-109,Sbeitla,105204.42,sim_citizen_29,False
+SIM-0110,Kasserine,Kasserine,35.1676,8.8365,Road - Sbeitla,tarmim triq Sbeitla,fr,ROAD,CL-110,Sbeitla,95757.06,sim_citizen_30,False
+SIM-0111,Kasserine,Kasserine,35.1676,8.8365,Lighting - Cherarda,tajdid el daw fi Cherarda,fr,LIGHTING,CL-111,Cherarda,199953.2,sim_citizen_31,False
+SIM-0112,Kasserine,Kasserine,35.1676,8.8365,Lighting - Jelma,إنارة الشوارع في Jelma,ar-TN,LIGHTING,CL-112,Jelma,311421.28,sim_citizen_32,False
+SIM-0113,Sidi_Bouzid,Sidi_Bouzid,35.0382,9.4849,Road - Metlaoui,إصلاح طريق Metlaoui,ar-TN,ROAD,CL-113,Metlaoui,61077.52,sim_citizen_33,False
+SIM-0114,Kasserine,Kasserine,35.1676,8.8365,School - Haffouz,tajdid el madrasa fi Haffouz,fr,SCHOOL,CL-114,Haffouz,377758.83,sim_citizen_34,False
+SIM-0115,Sidi_Bouzid,Sidi_Bouzid,35.0382,9.4849,Road - Cherarda,Réparer la route de Cherarda,fr,ROAD,CL-115,Cherarda,284933.34,sim_citizen_35,False
+SIM-0116,Gafsa,Gafsa,34.425,8.7842,Road - Sbeitla,إصلاح طريق Sbeitla,ar-TN,ROAD,CL-116,Sbeitla,222443.19,sim_citizen_36,False
+SIM-0117,Tunis,Tunis,36.8065,10.1815,School - Regueb,ترميم مدرسة Regueb,ar-TN,SCHOOL,CL-117,Regueb,24807.82,sim_citizen_37,False
+SIM-0118,Kairouan,Kairouan,35.6781,10.0963,Waste - Regueb,ramy el zbel fi Regueb,fr,WASTE,CL-118,Regueb,385099.28,sim_citizen_38,False
+SIM-0119,Tunis,Tunis,36.8065,10.1815,Waste - Metlaoui,ramy el zbel fi Metlaoui,fr,WASTE,CL-119,Metlaoui,86932.05,sim_citizen_39,False
+SIM-0120,Tozeur,Tozeur,33.9197,8.1335,School - Jelma,tajdid el madrasa fi Jelma,fr,SCHOOL,CL-120,Jelma,185518.31,sim_citizen_00,False
+SIM-0121,Tunis,Tunis,36.8065,10.1815,School - Le Kram,islah el madrasa fi Le Kram,fr,SCHOOL,CL-121,Le Kram,335677.79,sim_citizen_01,False
+SIM-0122,Kasserine,Kasserine,35.1676,8.8365,School - Jelma,islah el madrasa fi Jelma,fr,SCHOOL,CL-122,Jelma,305180.99,sim_citizen_02,False
+SIM-0123,Tozeur,Tozeur,33.9197,8.1335,Waste - Le Kram,Collecte des déchets à Le Kram,fr,WASTE,CL-123,Le Kram,207836.47,sim_citizen_03,False
+SIM-0124,Gafsa,Gafsa,34.425,8.7842,Lighting - Jelma,tajdid el daw fi Jelma,fr,LIGHTING,CL-124,Jelma,154833.49,sim_citizen_04,False
+SIM-0125,Gafsa,Gafsa,34.425,8.7842,School - Nefta,ترميم مدرسة Nefta,ar-TN,SCHOOL,CL-125,Nefta,231200.59,sim_citizen_05,False
+SIM-0126,Tozeur,Tozeur,33.9197,8.1335,Lighting - Regueb,tajdid el daw fi Regueb,fr,LIGHTING,CL-126,Regueb,293628.37,sim_citizen_06,False
+SIM-0127,Kairouan,Kairouan,35.6781,10.0963,Lighting - Jelma,daw el charea fi Jelma,fr,LIGHTING,CL-127,Jelma,190306.33,sim_citizen_07,False
+SIM-0128,Kasserine,Kasserine,35.1676,8.8365,Road - Nefta,tarmim triq Nefta,fr,ROAD,CL-128,Nefta,173672.43,sim_citizen_08,False
+SIM-0129,Sidi_Bouzid,Sidi_Bouzid,35.0382,9.4849,School - Le Kram,tajdid el madrasa fi Le Kram,fr,SCHOOL,CL-129,Le Kram,230319.72,sim_citizen_09,False
+SIM-0130,Gafsa,Gafsa,34.425,8.7842,Waste - Le Kram,نظافة Le Kram,ar-TN,WASTE,CL-130,Le Kram,287084.88,sim_citizen_10,False
+SIM-0131,Gafsa,Gafsa,34.425,8.7842,School - Nefta,islah el madrasa fi Nefta,fr,SCHOOL,CL-131,Nefta,65849.24,sim_citizen_11,False
+SIM-0132,Sidi_Bouzid,Sidi_Bouzid,35.0382,9.4849,School - Regueb,islah el madrasa fi Regueb,fr,SCHOOL,CL-132,Regueb,92785.57,sim_citizen_12,False
+SIM-0133,Tunis,Tunis,36.8065,10.1815,Waste - Nefta,نظافة Nefta,ar-TN,WASTE,CL-133,Nefta,392594.04,sim_citizen_13,False
+SIM-0134,Sidi_Bouzid,Sidi_Bouzid,35.0382,9.4849,School - Cherarda,ترميم مدرسة Cherarda,ar-TN,SCHOOL,CL-134,Cherarda,88187.79,sim_citizen_14,False
+SIM-0135,Kasserine,Kasserine,35.1676,8.8365,Lighting - Nefta,Éclairage public à Nefta,fr,LIGHTING,CL-135,Nefta,390232.07,sim_citizen_15,False
+SIM-0136,Tozeur,Tozeur,33.9197,8.1335,School - Metlaoui,tajdid el madrasa fi Metlaoui,fr,SCHOOL,CL-136,Metlaoui,58983.31,sim_citizen_16,False
+SIM-0137,Kasserine,Kasserine,35.1676,8.8365,School - Jelma,tajdid el madrasa fi Jelma,fr,SCHOOL,CL-137,Jelma,187378.14,sim_citizen_17,False
+SIM-0138,Sidi_Bouzid,Sidi_Bouzid,35.0382,9.4849,Road - Nefta,aslah triq Nefta,fr,ROAD,CL-138,Nefta,63353.11,sim_citizen_18,False
+SIM-0139,Kasserine,Kasserine,35.1676,8.8365,Waste - Jelma,Collecte des déchets à Jelma,fr,WASTE,CL-139,Jelma,239268.04,sim_citizen_19,False
+SIM-0140,Tunis,Tunis,36.8065,10.1815,Road - Metlaoui,tarmim triq Metlaoui,fr,ROAD,CL-140,Metlaoui,328233.99,sim_citizen_20,False
+SIM-0141,Gafsa,Gafsa,34.425,8.7842,Road - Cherarda,Réparer la route de Cherarda,fr,ROAD,CL-141,Cherarda,232067.75,sim_citizen_21,False
+SIM-0142,Kairouan,Kairouan,35.6781,10.0963,Lighting - Haffouz,daw el charea fi Haffouz,fr,LIGHTING,CL-142,Haffouz,365231.66,sim_citizen_22,False
+SIM-0143,Gafsa,Gafsa,34.425,8.7842,Waste - Nefta,Collecte des déchets à Nefta,fr,WASTE,CL-143,Nefta,251659.75,sim_citizen_23,False
+SIM-0144,Tunis,Tunis,36.8065,10.1815,Road - Cherarda,tarmim triq Cherarda,fr,ROAD,CL-144,Cherarda,120565.53,sim_citizen_24,False
+SIM-0145,Kasserine,Kasserine,35.1676,8.8365,Lighting - Cherarda,tajdid el daw fi Cherarda,fr,LIGHTING,CL-145,Cherarda,229757.05,sim_citizen_25,False
+SIM-0146,Sidi_Bouzid,Sidi_Bouzid,35.0382,9.4849,Road - Haffouz,aslah triq Haffouz,fr,ROAD,CL-146,Haffouz,281961.03,sim_citizen_26,False
+SIM-0147,Kairouan,Kairouan,35.6781,10.0963,School - Sbeitla,islah el madrasa fi Sbeitla,fr,SCHOOL,CL-147,Sbeitla,129479.86,sim_citizen_27,False
+SIM-0148,Gafsa,Gafsa,34.425,8.7842,Waste - Regueb,tanzif Regueb,fr,WASTE,CL-148,Regueb,371086.2,sim_citizen_28,False
+SIM-0149,Tunis,Tunis,36.8065,10.1815,Lighting - Haffouz,Éclairage public à Haffouz,fr,LIGHTING,CL-149,Haffouz,226933.7,sim_citizen_29,False
+SIM-D0000,Tunis,Tunis,36.8065,10.1815,School - Regueb,ترميم مدرسة Regueb,ar-TN,SCHOOL,CL-038,Regueb,101898.06,sim_citizen_04,True
+SIM-D0001,Tozeur,Tozeur,33.9197,8.1335,School - Cherarda,Rénover l'école de Cherarda,fr,SCHOOL,CL-015,Cherarda,185294.04,sim_citizen_38,True
+SIM-D0002,Kasserine,Kasserine,35.1676,8.8365,Lighting - Cherarda,إنارة الشوارع في Cherarda,ar-TN,LIGHTING,CL-145,Cherarda,225563.07,sim_citizen_29,True
+SIM-D0003,Tozeur,Tozeur,33.9197,8.1335,Road - Haffouz,aslah triq Haffouz,fr,ROAD,CL-077,Haffouz,113378.61,sim_citizen_17,True
+SIM-D0004,Kasserine,Kasserine,35.1676,8.8365,Road - Nefta,aslah triq Nefta,fr,ROAD,CL-128,Nefta,173349.15,sim_citizen_05,True
+SIM-D0005,Kairouan,Kairouan,35.6781,10.0963,School - Jelma,islah el madrasa fi Jelma,fr,SCHOOL,CL-010,Jelma,87564.62,sim_citizen_38,True
+SIM-D0006,Tozeur,Tozeur,33.9197,8.1335,Lighting - Haffouz,Éclairage public à Haffouz,fr,LIGHTING,CL-064,Haffouz,31494.18,sim_citizen_36,True
+SIM-D0007,Sidi_Bouzid,Sidi_Bouzid,35.0382,9.4849,School - Regueb,tajdid el madrasa fi Regueb,fr,SCHOOL,CL-005,Regueb,180222.2,sim_citizen_36,True
+SIM-D0008,Kairouan,Kairouan,35.6781,10.0963,School - Jelma,Rénover l'école de Jelma,fr,SCHOOL,CL-010,Jelma,81084.57,sim_citizen_28,True
+SIM-D0009,Sidi_Bouzid,Sidi_Bouzid,35.0382,9.4849,Lighting - Jelma,Éclairage public à Jelma,fr,LIGHTING,CL-071,Jelma,156243.81,sim_citizen_27,True
+SIM-D0010,Gafsa,Gafsa,34.425,8.7842,School - Nefta,Rénover l'école de Nefta,fr,SCHOOL,CL-125,Nefta,229120.51,sim_citizen_26,True
+SIM-D0011,Sidi_Bouzid,Sidi_Bouzid,35.0382,9.4849,Waste - Metlaoui,نظافة Metlaoui,ar-TN,WASTE,CL-085,Metlaoui,134363.73,sim_citizen_10,True
+SIM-D0012,Tozeur,Tozeur,33.9197,8.1335,School - Jelma,islah el madrasa fi Jelma,fr,SCHOOL,CL-084,Jelma,198945.12,sim_citizen_18,True
+SIM-D0013,Tunis,Tunis,36.8065,10.1815,Lighting - Jelma,daw el charea fi Jelma,fr,LIGHTING,CL-102,Jelma,106520.11,sim_citizen_05,True
+SIM-D0014,Gafsa,Gafsa,34.425,8.7842,School - Haffouz,islah el madrasa fi Haffouz,fr,SCHOOL,CL-080,Haffouz,163744.72,sim_citizen_25,True
+SIM-D0015,Gafsa,Gafsa,34.425,8.7842,School - Nefta,Rénover l'école de Nefta,fr,SCHOOL,CL-131,Nefta,68963.78,sim_citizen_34,True
+SIM-D0016,Kairouan,Kairouan,35.6781,10.0963,Waste - Regueb,tanzif Regueb,fr,WASTE,CL-118,Regueb,333596.57,sim_citizen_33,True
+SIM-D0017,Kasserine,Kasserine,35.1676,8.8365,Waste - Metlaoui,نظافة Metlaoui,ar-TN,WASTE,CL-092,Metlaoui,294734.51,sim_citizen_28,True
+SIM-D0018,Tunis,Tunis,36.8065,10.1815,Lighting - Le Kram,tajdid el daw fi Le Kram,fr,LIGHTING,CL-013,Le Kram,99558.1,sim_citizen_08,True
+SIM-D0019,Gafsa,Gafsa,34.425,8.7842,Road - Nefta,tarmim triq Nefta,fr,ROAD,CL-073,Nefta,293899.04,sim_citizen_31,True
+SIM-D0020,Sidi_Bouzid,Sidi_Bouzid,35.0382,9.4849,Road - Le Kram,tarmim triq Le Kram,fr,ROAD,CL-031,Le Kram,278128.82,sim_citizen_38,True
+SIM-D0021,Kasserine,Kasserine,35.1676,8.8365,Road - Le Kram,aslah triq Le Kram,fr,ROAD,CL-061,Le Kram,235241.04,sim_citizen_35,True
+SIM-D0022,Tunis,Tunis,36.8065,10.1815,Waste - Cherarda,نظافة Cherarda,ar-TN,WASTE,CL-003,Cherarda,237188.06,sim_citizen_14,True
+SIM-D0023,Tunis,Tunis,36.8065,10.1815,Lighting - Nefta,tajdid el daw fi Nefta,fr,LIGHTING,CL-029,Nefta,451556.84,sim_citizen_09,True
+SIM-D0024,Kairouan,Kairouan,35.6781,10.0963,Lighting - Jelma,إنارة الشوارع في Jelma,ar-TN,LIGHTING,CL-127,Jelma,178423.31,sim_citizen_17,True
+SIM-D0025,Kairouan,Kairouan,35.6781,10.0963,Lighting - Jelma,إنارة الشوارع في Jelma,ar-TN,LIGHTING,CL-106,Jelma,44742.61,sim_citizen_15,True
+SIM-D0026,Gafsa,Gafsa,34.425,8.7842,Road - Sbeitla,aslah triq Sbeitla,fr,ROAD,CL-116,Sbeitla,198729.1,sim_citizen_12,True
+SIM-D0027,Gafsa,Gafsa,34.425,8.7842,Waste - Le Kram,ramy el zbel fi Le Kram,fr,WASTE,CL-130,Le Kram,319754.53,sim_citizen_04,True
+SIM-D0028,Tunis,Tunis,36.8065,10.1815,Road - Haffouz,إصلاح طريق Haffouz,ar-TN,ROAD,CL-070,Haffouz,329631.74,sim_citizen_32,True
+SIM-D0029,Sidi_Bouzid,Sidi_Bouzid,35.0382,9.4849,Waste - Sbeitla,Collecte des déchets à Sbeitla,fr,WASTE,CL-068,Sbeitla,280356.88,sim_citizen_19,True
+SIM-D0030,Gafsa,Gafsa,34.425,8.7842,Waste - Regueb,ramy el zbel fi Regueb,fr,WASTE,CL-148,Regueb,369932.9,sim_citizen_09,True
+SIM-D0031,Kasserine,Kasserine,35.1676,8.8365,School - Haffouz,ترميم مدرسة Haffouz,ar-TN,SCHOOL,CL-114,Haffouz,375984.28,sim_citizen_21,True
+SIM-D0032,Gafsa,Gafsa,34.425,8.7842,Road - Cherarda,aslah triq Cherarda,fr,ROAD,CL-141,Cherarda,223519.07,sim_citizen_20,True
+SIM-D0033,Kasserine,Kasserine,35.1676,8.8365,Road - Cherarda,إصلاح طريق Cherarda,ar-TN,ROAD,CL-048,Cherarda,60419.98,sim_citizen_24,True
+SIM-D0034,Tunis,Tunis,36.8065,10.1815,School - Cherarda,islah el madrasa fi Cherarda,fr,SCHOOL,CL-059,Cherarda,183023.82,sim_citizen_30,True
+SIM-D0035,Tozeur,Tozeur,33.9197,8.1335,Road - Metlaoui,إصلاح طريق Metlaoui,ar-TN,ROAD,CL-097,Metlaoui,123686.3,sim_citizen_09,True
+SIM-D0036,Tozeur,Tozeur,33.9197,8.1335,Lighting - Regueb,Éclairage public à Regueb,fr,LIGHTING,CL-126,Regueb,260704.96,sim_citizen_37,True
+SIM-D0037,Tozeur,Tozeur,33.9197,8.1335,School - Jelma,Rénover l'école de Jelma,fr,SCHOOL,CL-084,Jelma,209127.38,sim_citizen_28,True
+SIM-D0038,Gafsa,Gafsa,34.425,8.7842,School - Cherarda,tajdid el madrasa fi Cherarda,fr,SCHOOL,CL-025,Cherarda,125264.33,sim_citizen_00,True
+SIM-D0039,Sidi_Bouzid,Sidi_Bouzid,35.0382,9.4849,Road - Regueb,tarmim triq Regueb,fr,ROAD,CL-036,Regueb,171840.63,sim_citizen_09,True
+SIM-D0040,Sidi_Bouzid,Sidi_Bouzid,35.0382,9.4849,Lighting - Haffouz,إنارة الشوارع في Haffouz,ar-TN,LIGHTING,CL-019,Haffouz,180249.41,sim_citizen_16,True
+SIM-D0041,Tunis,Tunis,36.8065,10.1815,School - Regueb,tajdid el madrasa fi Regueb,fr,SCHOOL,CL-086,Regueb,291598.77,sim_citizen_05,True
+SIM-D0042,Tozeur,Tozeur,33.9197,8.1335,School - Jelma,ترميم مدرسة Jelma,ar-TN,SCHOOL,CL-084,Jelma,208289.85,sim_citizen_24,True
+SIM-D0043,Gafsa,Gafsa,34.425,8.7842,Lighting - Cherarda,إنارة الشوارع في Cherarda,ar-TN,LIGHTING,CL-081,Cherarda,290564.7,sim_citizen_31,True
+SIM-D0044,Sidi_Bouzid,Sidi_Bouzid,35.0382,9.4849,Road - Nefta,Réparer la route de Nefta,fr,ROAD,CL-138,Nefta,65585.54,sim_citizen_15,True
+SIM-D0045,Gafsa,Gafsa,34.425,8.7842,Road - Nefta,Réparer la route de Nefta,fr,ROAD,CL-073,Nefta,283289.42,sim_citizen_27,True
+SIM-D0046,Gafsa,Gafsa,34.425,8.7842,School - Cherarda,tajdid el madrasa fi Cherarda,fr,SCHOOL,CL-025,Cherarda,118353.27,sim_citizen_06,True
+SIM-D0047,Sidi_Bouzid,Sidi_Bouzid,35.0382,9.4849,Road - Metlaoui,Réparer la route de Metlaoui,fr,ROAD,CL-113,Metlaoui,64632.25,sim_citizen_01,True
+SIM-D0048,Gafsa,Gafsa,34.425,8.7842,Lighting - Nefta,إنارة الشوارع في Nefta,ar-TN,LIGHTING,CL-011,Nefta,273811.12,sim_citizen_18,True
+SIM-D0049,Tunis,Tunis,36.8065,10.1815,Waste - Sbeitla,نظافة Sbeitla,ar-TN,WASTE,CL-091,Sbeitla,360973.15,sim_citizen_15,True

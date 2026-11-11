@@ -85,7 +85,7 @@ baladiya-trust/
 │   ├── models.py                   # Track 4 domain models
 │   ├── api_rest.py                 # DRF ViewSets, JWT auth, Darja webhook
 │   ├── schema_graphql.py           # Strawberry schema + real DataLoader
-│   └── ml_anomaly.py               # IsolationForest + rolling z-score + P/R/F1
+│   └── ml_anomaly.py               # Sybil z-score, duplicate hash, lag rule + P/R/F1
 ├── config/                         # Django project (settings, ASGI, root URLs)
 ├── contracts/
 │   ├── BaladiyaLedger.sol          # Tranche release + soulbound voter registry
@@ -110,9 +110,10 @@ baladiya-trust/
 _Last updated: 2026-11-11_
 
 The repository now has a runnable Django foundation for Baladiya-Trust: Track 4 models are migrated
-on PostgreSQL, JWT authentication and role-based permissions are wired, and the first REST endpoints
-are in place. The remaining starter modules (GraphQL, gRPC, simulator, ML, MCP, skills, LangGraph,
-contracts, dashboard) are still Track 1 stubs and are being adapted next.
+on PostgreSQL, JWT authentication and role-based permissions are wired, REST + GraphQL + gRPC are
+live, the simulator/ML anomaly baseline produces labeled data, and `BaladiyaTreasuryMCP` exposes the
+treasury and audit domain. The remaining starter modules (skills, LangGraph, contracts, dashboard)
+are still Track 1 stubs and are being adapted next.
 
 | Area | Status | Notes |
 | :--- | :---: | :--- |
@@ -127,18 +128,28 @@ contracts, dashboard) are still Track 1 stubs and are being adapted next.
 | JWT auth + 4-role RBAC + register | Done | Guide §5.3; claims `role`, `municipality`, `wallet_address` |
 | REST ViewSets, filters, validation | Done | Guide §5.3; django-filter, search and ordering |
 | Darja webhook authentication | Done | JWT (`AGENT_SERVICE`) or `X-N8N-Secret` header |
-| Strawberry GraphQL + real DataLoader | Not started | Guide §5.4 |
-| gRPC `baladiya.proto` + registered servicer | Not started | Guide §5.5 |
-| Simulator + anomaly injection + labels CSV | Not started | Guide §5.6 |
-| ML sybil/progress/photo detectors + P/R/F1 | Not started | Guide §5.7 |
-| `BaladiyaTreasuryMCP` resources and tools | Not started | Guide §5.8 |
+| Strawberry GraphQL + real DataLoader | Done | Guide §5.4; nested query ≤ 4 SQL, pytest |
+| gRPC `baladiya.proto` + registered servicer | Done | Guide §5.5; HMAC, ML lag rule, agent hook |
+| Simulator + anomaly injection + labels CSV | Done | Guide §5.6; fixed seed, FR/Darja duplicates, sybil bursts, S-curve, reused photos |
+| ML sybil/progress/photo detectors + P/R/F1 | Done | Guide §5.7; z-score sybil, duplicate hash, rolling lag; P/R/F1 = 1.0 on synthetic data |
+| `BaladiyaTreasuryMCP` resources and tools | Done | Guide §5.8; treasury + audit resources, QF, treasury and tranche tools |
 | 3 skills with pytest | Not started | Guide §5.9 |
 | LangGraph `StateGraph` + PostgresSaver + interrupt | Not started | Guide §5.10 |
 | `BaladiyaLedger.sol` + Foundry tests + real Web3.py | Not started | Guide §5.11 |
 | Dashboard (map, charts, agent trace, tx verifier) | Not started | Guide §5.12 |
 | Django Channels SSE/WebSocket + n8n alerts | Not started | Guide §5.12 |
 | Docker Compose: backend + grpc + corrected hosts | Not started | Guide §5.12 |
-| Tests, UML, slides, video, archive | Not started | Guide §7 |
+| Tests, UML, slides, video, archive | In progress | 14 tests passing; UML, slides, video and archive pending |
+
+### Verified locally
+
+| Check | Result |
+| :--- | :--- |
+| Pytest suite | **14 passed** |
+| GraphQL nested query | 4 SQL queries for municipalities → proposals → votes → milestones |
+| gRPC ingest | `accepted_count=1`, lag anomaly `MEDIUM 0.25`, invalid HMAC → `PERMISSION_DENIED` |
+| Simulator (seed 42, 200 proposals) | 50 duplicates, 4,722 votes (400 sybil), 2,400 milestones (367 lagging, 4 reused photos) |
+| ML benchmark on simulator labels | Votes, progress lag, duplicate photos and combined: **P/R/F1 = 1.0** |
 
 ## Roadmap
 
@@ -152,17 +163,17 @@ contracts, dashboard) are still Track 1 stubs and are being adapted next.
 - [ ] Test 200 vs 403 for each role.
 - [x] Implement DRF ViewSets for proposals, votes, milestones, anomalies, receipts.
 - [x] Fix Darja webhook authentication (no `AllowAny`).
-- [ ] Implement nested GraphQL schema and real DataLoader; test query count.
-- [ ] Create `baladiya.proto`, generate stubs, register `MilestoneIngestServiceServicer`.
+- [x] Implement nested GraphQL schema and real DataLoader; test query count.
+- [x] Create `baladiya.proto`, generate stubs, register `MilestoneIngestServiceServicer`.
 - [ ] Integration check: register, login, proposal, GraphQL query, gRPC packet. Tag `v0.1`.
 
 ### Week 2 — Simulator, ML, MCP and skills (Nov 18–24)
 
-- [ ] Simulator: proposals in French/Darja with duplicates, votes, S-curve milestones, fixed seed.
-- [ ] Inject sybil bursts, progress lag > 20 points, reused photo hash; export CSV with labels.
-- [ ] IsolationForest sybil detector + rolling z-score + deterministic lag rule.
+- [x] Simulator: proposals in French/Darja with duplicates, votes, S-curve milestones, fixed seed.
+- [x] Inject sybil bursts, progress lag > 20 points, reused photo hash; export CSV with labels.
+- [x] Z-score sybil detector + rolling z-score + deterministic lag and duplicate-photo rules.
 - [ ] Wire detectors to Django signals/tasks writing `AnomalyEvent`.
-- [ ] Implement `BaladiyaTreasuryMCP` (2 resources, 3 tools) and test with MCP Inspector.
+- [x] Implement `BaladiyaTreasuryMCP` (2 resources, 3 tools), unit-tested; MCP Inspector run pending.
 - [ ] Implement `DarjaProposalClustererSkill` with Groq normalization + embeddings.
 - [ ] Implement `QuadraticFundingMathSkill` and `ZKSoulboundResidencyVoterSkill` with tests.
 - [ ] Stream milestones over gRPC; verify anomalies appear in DB and GraphQL. Tag `v0.2`.
@@ -214,10 +225,49 @@ Implemented endpoints so far:
 | `GET` | `/api/v1/anomalies/`, `/zk-receipts/` | JWT + role |
 | `POST` | `/api/v1/darja-intent/` | `AGENT_SERVICE` JWT or `X-N8N-Secret` |
 
+The gRPC `MilestoneIngestService` listens on port `50051`:
+
+```bash
+python -m grpc_service.server
+```
+
+The simulator writes `proposals.csv`, `votes.csv`, `milestones.csv` and `anomaly_labels.csv` under
+`simulator/data/`; the ML baseline reads those labels and prints Precision / Recall / F1:
+
+```bash
+python -m simulator.tunisian_simulator --n-proposals 200
+python -m backend.tunisovereign_core.ml_anomaly
+```
+
+Add `--seed-django` to load the simulated proposals into PostgreSQL before streaming milestone
+packets with `--send-grpc`. A full default run is deterministic: 200 proposals (50 duplicates),
+4,722 votes (400 sybil), and 2,400 milestones (367 lagging, 4 reused photos).
+
+The MCP server exposes two read-only resources and three tools:
+
+- `baladiya://municipality/{name}/treasury` and `baladiya://proposal/{code}/audit`
+- `get_municipality_treasury`, `compute_quadratic_funding`, `check_tranche_eligibility`
+
+```bash
+python -m mcp_server.tunisovereign_mcp
+# or inspect it interactively:
+mcp dev mcp_server/tunisovereign_mcp.py
+```
+
+It needs PostgreSQL and applied migrations because it reads the Django models directly.
+
 Docker Compose currently starts the database services only; the backend, gRPC, Anvil, n8n and
 dashboard services will be added in week 4 (Guide §5.12).
 
 ## Tests
+
+Run the tests with `pytest` (**14 tests passing**):
+
+- `test_graphql.py` — DataLoader batching and nested query count.
+- `test_ingestion.py` — HMAC signature and progress-lag rule.
+- `test_ml_anomaly.py` — sybil burst, normal traffic, duplicate photo and lag severity.
+- `test_simulator.py` — fixed seed reproducibility, labels and benchmark metrics.
+- `test_mcp.py` — quadratic funding, treasury snapshot, audit and tranche eligibility.
 
 Planned minimum test set (pytest / pytest-django):
 

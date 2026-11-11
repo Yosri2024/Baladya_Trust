@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package baladiya;
+
+service MilestoneIngestService {
+  rpc StreamMilestones (stream MilestonePacket) returns (IngestAck);
+  rpc EvaluateProposalRisk (RiskRequest) returns (RiskResponse);
+}
+
+message MilestonePacket {
+  string project_code = 1;
+  string municipality = 2;
+  double progress_pct = 3;
+  double paid_pct = 4;
+  string photo_hash = 5;
+  double latitude = 6;
+  double longitude = 7;
+  string iso_timestamp = 8;
+  string signature_hmac = 9;
+}
+
+message IngestAck {
+  int32 accepted_count = 1;
+  bool anomaly_triggered = 2;
+  string agent_thread_id = 3;
+}
+
+message RiskRequest {
+  string project_code = 1;
+}
+
+message RiskResponse {
+  string severity = 1;
+  double score = 2;
+  string tx_hash = 3;
+}
