@@ -1,207 +1,230 @@
-# 🇹🇳 TuniSovereign-AI: Multi-Protocol Django 6, Agentic Swarms, MCP & Zero-Knowledge Blockchain Starter Template
+# Baladiya-Trust — DS2 Capstone 2026–2027
 
-> **Official DS2 Capstone Starter Template (Academic Year 2026–2027)**  
-> **Course:** *AI Engineering and Software Architecture in the Era of AI and AI Agents*  
-> **Target Audience:** 3rd Year Licence in Business Intelligence (`3-BI`) & Business Information Systems (`3-BIS`)  
-> **Institution:** Higher Institute of Management of Tunis (**ISG Tunis**) — University of Tunis  
-> **Prepared by:** Chaouki Bayoudhi  
-> **Core Stack:** Python 3.11+ · Django 6 · DRF · Strawberry GraphQL · gRPC (`proto3`) · IsolationForest · FastMCP · LangGraph · Solidity (`Foundry Anvil`) · Web3.py · n8n · Streamlit
+> **Track 4:** Participatory Municipal Budgeting, Quadratic Funding and Geo-Verified Public Works
+> **Course:** AI Engineering and Software Architecture in the Era of AI and AI Agents
+> **Institution:** Higher Institute of Management of Tunis (ISG Tunis) — University of Tunis
+> **Target cohort:** 3rd Year Business Intelligence (3-BI) & Business Information Systems (3-BIS)
+> **Deadline:** Tuesday, December 8, 2026 at 23:59 (Tunis time)
+> **Defenses:** December 9–11, 2026
 
-## 📅 Key Academic Dates (DS2 2026–2027)
+This repository is our group's implementation of **Baladiya-Trust**, built on the official
+`tunisovereign-ds2-starter-template` by Chaouki Bayoudhi. The original course template is kept in
+[`READMEBayoudhi.md`](./READMEBayoudhi.md) for reference.
 
-| Milestone | Date & Time | Details |
+## Team
+
+| Member | Role | Owns |
 | :--- | :--- | :--- |
-| **Project Kickoff** | **Tuesday, November 10, 2026** | Start of the 4-Week Engineering Schedule |
-| **Final Submission Deadline** | **Tuesday, December 8, 2026 at 23:59 (Tunis Time)** | Submit single `.zip` or `.rar` archive to `homework.isg@gmail.com` |
-| **In-Class Oral Defenses** | **Wednesday, Dec 9 – Friday, Dec 11, 2026** | Live code walkthrough, parameter modification & individual Q&A |
+| _TBD_ | M1 — Backend | Django models, JWT/RBAC, REST, GraphQL, gRPC, Docker base |
+| _TBD_ | M2 — Data & ML | Simulator, IsolationForest, clustering, Precision/Recall/F1 |
+| _TBD_ | M3 — Agent | LangGraph, FastMCP, 3 skills, Groq/Ollama, tests |
+| _TBD_ | M4 — Chain & UI | Solidity, Web3.py, ZK commitments, Streamlit, n8n, README/video |
 
-## 🏗️ System Architecture Overview
+## The problem
 
-**TuniSovereign-AI** is a 6-layer service-oriented and agentic reference architecture designed for Tunisian public-interest infrastructure across interior and coastal governorates (*Kasserine, Sidi Bouzid, Gafsa, Kairouan, Tozeur, Sfax, Béja*).
+Citizens in Tunisian municipalities often lack visibility into how local budgets are allocated and
+whether public works are actually progressing. Proposals are duplicated, contractor progress is hard
+to verify, and payments can be released without objective evidence.
+
+## What we are building
+
+A platform where citizens submit municipal project proposals (roads, lighting, schools, waste
+collection) in Tunisian Darja or French, and public money is allocated and released transparently:
+
+1. **Duplicate proposals are merged** using multilingual embeddings and clustering.
+2. **Budget is allocated with quadratic funding**, which rewards projects with many small supporters
+   over a few large donors.
+3. **Contractor progress is audited**: milestone photos, GPS and progress data are compared with the
+   amount already paid.
+4. **Funds are released in tranches through a smart contract**, and every release is recorded on-chain.
+5. **Privacy is preserved**: voters prove residency through a salted cryptographic commitment and a
+   non-transferable voter token, without revealing identity or address.
+
+## Architecture
+
+The project follows the unified 6-layer DS2 architecture, adapted to Track 4:
+
+| Layer | Baladiya-Trust implementation |
+| :--- | :--- |
+| 1. Backend & auth | Django 6, custom `StakeholderUser` with 4 roles, JWT (SimpleJWT) |
+| 2. Multi-protocol APIs | REST (DRF), Strawberry GraphQL with DataLoader, gRPC (proto3) |
+| 3. Real-time & UI | Django Channels (SSE/WebSocket), Streamlit + Plotly + Folium |
+| 4. Agent | Stateful LangGraph `StateGraph` with PostgreSQL checkpoints and human approval |
+| 5. MCP & skills | `BaladiyaTreasuryMCP` + 3 modular Python skill classes |
+| 6. Blockchain & ZK | `BaladiyaLedger.sol` + soulbound voter registry, Web3.py, salted commitments |
+
+### End-to-end flow
 
 ```text
-+---------------------------------------------------------------------------------------------------+
-|                   LAYER 6: PROGRAMMATIC COMMAND CENTER & BOUNDARY AUTOMATION                      |
-|     Streamlit + Plotly Geospatial Cockpit (Port 8501)  |  n8n Boundary Webhook Workflows (5678)   |
-+-------------------------------------------+-------------------------------------------------------+
-                                            |
-                    REST (JSON) / Strawberry GraphQL (/graphql/) / WebSockets
-                                            v
-+---------------------------------------------------------------------------------------------------+
-|                 LAYER 1: MULTI-PROTOCOL DJANGO 6 CORE & CUSTOM JWT RBAC GATEWAY                   |
-|  - StakeholderUser (4 Roles: COOP_MEMBER, REGIONAL_AUDITOR, NATIONAL_ADMIN, AGENT_SERVICE)        |
-|  - DRF ViewSets + Custom SimpleJWT Claims (role, governorate, wallet_address)                     |
-|  - Strawberry GraphQL Schema + DataLoader Batching (Zero N+1 SQL Queries)                         |
-|  - gRPC Binary Servicer (proto3 on Port 50051) <--- Tunisian Diurnal Sensor Simulator (HMAC-SHA)  |
-+-------------------+-----------------------------------+-------------------------------------------+
-                    |                                   |
-                    v                                   v
-+---------------------------------------+   +-------------------------------------------------------+
-| LAYER 2: DUAL ML ANOMALY & FORECAST   |   | LAYER 3 & 4: STATEFUL LANGGRAPH AGENT + FASTMCP       |
-| - IsolationForest + Rolling Z-Score   |   | - Cyclic StateGraph (Intake -> Anomaly -> MCP Tool    |
-| - Diurnal Semi-Arid / Cold-Chain Sim  |   |   -> Policy Self-Correction Gate -> ZK Prover)        |
-| - Precision / Recall / F1 Harness     |   | - FastMCP Server (@mcp.resource & @mcp.tool)          |
-+---------------------------------------+   | - 3 Modular Skills (Darja NLP, Anomaly, ZK Web3)      |
-                                            +---------------------------+---------------------------+
-                                                                        |
-                                                       Web3.py + Salted SHA-256 Witness
-                                                                        v
-+---------------------------------------------------------------------------------------------------+
-|              LAYER 5: ZERO-KNOWLEDGE PRIVACY COMMITMENTS & SOLIDITY SMART CONTRACT                |
-|  TuniSovereignLedger.sol on Local Foundry Anvil (Port 8545, ChainID 31337) or Polygon Amoy        |
-|  Verifies: approved_units <= max_quota on-chain without exposing private citizen/plot coordinates |
-+---------------------------------------------------------------------------------------------------+
+Citizen (Darja/FR) --REST--> /api/v1/proposals/
+Simulator --gRPC--> StreamMilestones --> Django (MilestoneReport)
+                                              |
+                LangGraph (thread_id + PostgreSQL checkpoint)
+  intake -> dedup -> matching(MCP) -> milestone_check(ML) -> policy_gate
+                                          | PASS                  | FAIL
+                                       zk_prove                replan
+                                          |                (hold tranche,
+                                       settle               alert auditor)
+                                          |
+                        Web3.py -> BaladiyaLedger.sol (Anvil)
+                                          |
+                       OnChainZKReceipt (tx_hash) -> GraphQL -> Streamlit
 ```
 
-## 📂 Repository Structure
+**Rule:** the LLM is used only for language tasks (Darja parsing, explanations, routing). Money,
+thresholds and hashing stay deterministic Python and are unit-tested.
+
+## Repository structure
 
 ```text
-tunisovereign_ds2_starter_template/
-├── backend/
-│   └── tunisovereign_core/
-│       ├── models.py                      # 7 core Django 6 ORM models & custom StakeholderUser
-│       ├── api_rest.py                    # DRF ViewSets, custom SimpleJWT claims & Darja webhook
-│       ├── schema_graphql.py              # Strawberry GraphQL schema with DataLoader batching
-│       └── ml_anomaly.py                  # IsolationForest + Rolling Z-Score & Precision/Recall/F1 harness
-├── protos/
-│   └── tunisovereign.proto                # Contract-first Protocol Buffers (proto3) specification
-├── grpc_service/
-│   └── server.py                          # Binary gRPC server (StreamTelemetry & TriggerUrgentAudit)
-├── simulator/
-│   └── tunisian_simulator.py              # Multi-governorate diurnal telemetry & anomaly stream generator
-├── mcp_server/
-│   └── tunisovereign_mcp.py               # Official Python FastMCP server (@mcp.resource & @mcp.tool)
+baladiya-trust/
 ├── agent/
-│   ├── langgraph_agent.py                 # 5-node stateful LangGraph StateGraph orchestration loop
-│   └── skills/
-│       └── tunisovereign_skills.py        # 3 modular skills: DarjaDialectParser, TelemetryAnomaly, ZKSettlement
+│   ├── langgraph_agent.py          # LangGraph StateGraph (to replace starter sequential function)
+│   └── skills/                     # 3 modular skills + pytest
+├── backend/tunisovereign_core/
+│   ├── models.py                   # Track 4 domain models
+│   ├── api_rest.py                 # DRF ViewSets, JWT auth, Darja webhook
+│   ├── schema_graphql.py           # Strawberry schema + real DataLoader
+│   └── ml_anomaly.py               # IsolationForest + rolling z-score + P/R/F1
+├── config/                         # Django project (to be created)
 ├── contracts/
-│   ├── TuniSovereignLedger.sol            # Solidity ^0.8.20 smart contract enforcing quota compliance
-│   └── web3_zk_client.py                  # Web3.py client & salted zero-knowledge commitment prover
-├── workflows/
-│   └── tunisovereign_n8n_boundary_workflow.json  # Ready-to-import n8n webhook & alert workflow
-├── dashboard/
-│   └── streamlit_command_center.py        # Interactive Streamlit + Plotly Command-Center Dashboard
-├── docker-compose.yml                     # Full containerized stack (Postgres 16, Redis 7, Anvil, n8n, UI)
-├── Dockerfile                             # Python 3.11 container image definition
-├── requirements.txt                       # Python dependencies anchored on Django >= 6.0
-├── .env.example                           # Environment template for Django, Postgres, Groq/Ollama & Web3
-└── LICENSE                                # MIT License
+│   ├── BaladiyaLedger.sol          # Tranche release + soulbound voter registry
+│   ├── web3_zk_client.py           # Real Web3.py transactions (to replace simulated tx)
+│   └── deploy.py                   # Deploy script (to be created)
+├── dashboard/                      # Streamlit command center
+├── grpc_service/                   # gRPC servicer + generated stubs
+├── mcp_server/                     # BaladiyaTreasuryMCP
+├── protos/baladiya.proto           # Contract-first gRPC definition
+├── simulator/                      # Reproducible Tunisian municipality simulator
+├── workflows/                      # n8n boundary workflow
+├── docker-compose.yml
+├── Dockerfile
+├── requirements.txt
+├── .env.example
+├── README.md                       # This file
+└── READMEBayoudhi.md               # Original course starter README
 ```
 
-## 🚀 Quickstart Guide
+## Current status
 
-### Option A: Containerized Stack with Docker Compose
+_Last updated: 2026-11-11_
 
-1. **Copy the environment template:**
-   ```bash
-   cp .env.example .env
-   ```
+The repository currently contains the **unmodified course starter** (Track 1 water/agriculture
+stubs). No Baladiya-Trust functionality has been implemented yet.
 
-2. **Build and launch all services (PostgreSQL 16, Redis 7, Foundry Anvil EVM, n8n, and Streamlit Cockpit):**
-   ```bash
-   docker compose up --build
-   ```
+| Area | Status | Notes |
+| :--- | :---: | :--- |
+| Fork + local clone + upstream remote | Done | `origin` = Yosri2024 fork, `upstream` = professor repo |
+| Environment check | Done | Python 3.14.10, Docker 29.9.3, Compose v5.5.1 |
+| Django project scaffold (`config/`, `manage.py`, apps, migrations) | Not started | Guide §5.1 |
+| Track 4 models (`Municipality`, `Proposal`, `Vote`, `MilestoneReport`, `Tranche`, …) | Not started | Guide §5.2 |
+| JWT auth + 4-role RBAC + register | Not started | Guide §5.3 |
+| REST ViewSets, filters, validation | Not started | Guide §5.3 |
+| Strawberry GraphQL + real DataLoader | Not started | Guide §5.4 |
+| gRPC `baladiya.proto` + registered servicer | Not started | Guide §5.5 |
+| Simulator + anomaly injection + labels CSV | Not started | Guide §5.6 |
+| ML sybil/progress/photo detectors + P/R/F1 | Not started | Guide §5.7 |
+| `BaladiyaTreasuryMCP` resources and tools | Not started | Guide §5.8 |
+| 3 skills with pytest | Not started | Guide §5.9 |
+| LangGraph `StateGraph` + PostgresSaver + interrupt | Not started | Guide §5.10 |
+| `BaladiyaLedger.sol` + Foundry tests + real Web3.py | Not started | Guide §5.11 |
+| Dashboard (map, charts, agent trace, tx verifier) | Not started | Guide §5.12 |
+| Django Channels SSE/WebSocket + n8n alerts | Not started | Guide §5.12 |
+| Docker Compose: backend + grpc + corrected hosts | Not started | Guide §5.12 |
+| Tests, UML, slides, video, archive | Not started | Guide §7 |
 
-3. **Access running endpoints:**
-   - **Streamlit Command Center:** `http://localhost:8501`
-   - **Foundry Anvil Local EVM RPC:** `http://localhost:8545` (`ChainID: 31337`)
-   - **n8n Boundary Workflow Editor:** `http://localhost:5678`
+## Roadmap
 
-### Option B: Local Python Virtual Environment (Step-by-Step Verification)
+### Week 1 — Django foundation and three APIs (Nov 10–17)
 
-1. **Create and activate a virtual environment:**
-   ```bash
-   python3 -m venv .venv
-   source .venv/bin/activate
-   pip install -r requirements.txt
-   ```
+- [ ] Create `config/` project, `apps.py`, `__init__.py` files, PostgreSQL settings.
+- [ ] Rewrite `models.py` for Baladiya-Trust, run migrations.
+- [ ] Draw UML class diagram and proposal-to-payout sequence diagram.
+- [ ] Implement register/login/refresh JWT with `role`, `municipality`, `wallet_address`.
+- [ ] Implement `IsCitizen`, `IsMunicipalAuditor`, `IsNationalAdmin`; test 200 vs 403.
+- [ ] Implement DRF ViewSets for proposals, votes, milestones, anomalies, receipts.
+- [ ] Fix Darja webhook authentication (no `AllowAny`).
+- [ ] Implement nested GraphQL schema and real DataLoader; test query count.
+- [ ] Create `baladiya.proto`, generate stubs, register `MilestoneIngestServiceServicer`.
+- [ ] Integration check: register, login, proposal, GraphQL query, gRPC packet. Tag `v0.1`.
 
-2. **Compile the Protocol Buffers (`proto3`) schema into Python gRPC stubs:**
-   ```bash
-   python -m grpc_tools.protoc \
-     -I./protos \
-     --python_out=./grpc_service \
-     --grpc_python_out=./grpc_service \
-     ./protos/tunisovereign.proto
-   ```
+### Week 2 — Simulator, ML, MCP and skills (Nov 18–24)
 
-3. **Run the Tunisian Governorate Telemetry Simulator:**
-   ```bash
-   python simulator/tunisian_simulator.py
-   ```
+- [ ] Simulator: proposals in French/Darja with duplicates, votes, S-curve milestones, fixed seed.
+- [ ] Inject sybil bursts, progress lag > 20 points, reused photo hash; export CSV with labels.
+- [ ] IsolationForest sybil detector + rolling z-score + deterministic lag rule.
+- [ ] Wire detectors to Django signals/tasks writing `AnomalyEvent`.
+- [ ] Implement `BaladiyaTreasuryMCP` (2 resources, 3 tools) and test with MCP Inspector.
+- [ ] Implement `DarjaProposalClustererSkill` with Groq normalization + embeddings.
+- [ ] Implement `QuadraticFundingMathSkill` and `ZKSoulboundResidencyVoterSkill` with tests.
+- [ ] Stream milestones over gRPC; verify anomalies appear in DB and GraphQL. Tag `v0.2`.
 
-4. **Run the `IsolationForest` ML Anomaly Benchmark (`Precision`, `Recall`, `F1-Score`):**
-   ```bash
-   python backend/tunisovereign_core/ml_anomaly.py
-   ```
-   *Sample Output:*
-   ```text
-   ML Anomaly Evaluation Metrics: {'samples': 500, 'injected_anomalies': 40, 'detected_anomalies': 40, 'precision': 0.875, 'recall': 0.875, 'f1_score': 0.875}
-   ```
+### Week 3 — LangGraph and blockchain/ZK (Nov 25–Dec 1)
 
-5. **Execute the End-to-End Stateful `LangGraph` Agent + `FastMCP` + ZK Blockchain Settlement Loop:**
-   ```bash
-   python agent/langgraph_agent.py
-   ```
-   *Sample Output:*
-   ```text
-   [TuniSovereign-AI Agent | Thread ds2-kasserine-2026-001] Parsed Darja request for Kasserine (Node KAS-SBEITLA-PLOT-04). Anomaly status: CRITICAL (confidence=0.841). MCP approved 3200.0 units (<= 4200.0 max quota). Anchored ZK Commitment 0x7b98ec43b497351b... in Tx 0x3f8a901c2d4e6f8a...
-   ```
+- [ ] Build `StateGraph` skeleton with conditional edges and stub nodes.
+- [ ] Replace stubs with Groq JSON + Pydantic, skills, MCP client, Ollama fallback.
+- [ ] Add PostgresSaver checkpointing and `interrupt_before=["settle"]`.
+- [ ] Test resume after process stop; persist every run in `AgentLoopExecution`.
+- [ ] Write `BaladiyaLedger.sol` + `forge test` + Anvil service + `deploy.py`.
+- [ ] Real Web3.py `releaseTranche`, receipts stored in `OnChainZKReceipt`, revert handling.
+- [ ] Residency commitment registration; reject duplicate voter commitments.
+- [ ] End-to-end nominal and blocked (25% lag) scenarios. Tag `v0.3`.
 
-6. **Launch the Interactive Command-Center Cockpit:**
-   ```bash
-   streamlit run dashboard/streamlit_command_center.py
-   ```
+### Week 4 — Dashboard, automation, packaging (Dec 2–8)
 
-## 🌍 The 8 Tunisian National Impact Tracks
+- [ ] Streamlit: municipality map, Plotly charts, agent trace console, tx verifier.
+- [ ] Auditor approval button resuming the checkpoint.
+- [ ] Django Channels SSE/WebSocket for live anomalies and receipts.
+- [ ] n8n: inbound Telegram/webhook to `/api/v1/darja-intent/`, outbound alerts.
+- [ ] Docker Compose one-command startup (Django, Postgres, Redis, Anvil, n8n, gRPC, dashboard).
+- [ ] Rewrite README with final architecture, setup, API examples.
+- [ ] Record 5–10 min demo video, prepare `.pptx` and `.pdf` slides.
+- [ ] Submit archive to `homework.isg@gmail.com` before the deadline.
 
-Every student group (4 students) implements the unified 6-layer **Django 6** architecture applied to **Track 01 (Default Flagship)** or one of the 8 Tunisian National Impact Tracks:
+## Getting started (work in progress)
 
-| Track | Code Name | Tunisian Socio-Economic Domain & Core Mission |
-| :---: | :--- | :--- |
-| **Track 01** | **TunicChain-Sovereign** *(Flagship)* | Autonomous ZK Water, SONEDE/GDA Aquifer & Agricultural Cooperative Network for Interior Governorates |
-| **Track 02** | **PharmaSovereign-TN** | Autonomous ZK Drug Authenticity, PCT Cold-Chain Telemetry & Anti-Shortage Protocol |
-| **Track 03** | **TuniRemit-DAO** | Autonomous Diaspora Remittance-to-Capital Swarm & Regional Micro-Syndicate Engine |
-| **Track 04** | **Baladiya-Trust** | Participatory Municipal Budgeting, Quadratic Funding & Geo-Verified Public Works Engine |
-| **Track 05** | **Tunihara-MedGuard** | Predictive CNAM Subsidized Chronic-Care Medication Guard & Epidemiological Forecaster |
-| **Track 06** | **TuniSkill-DID** | Autonomous University-to-Industry Skills-Mismatch Auditor & W3C Verifiable Credential Marketplace |
-| **Track 07** | **SolarSouk-STEG** | Autonomous Agrivoltaic & Rooftop Solar Micro-Grid Balancing & ZK Carbon-Credit Cooperative |
-| **Track 08** | **SoukElFallah-FairTrade** | Autonomous Olive-Oil, Dates & Cereal Anti-Speculation, Price-Stabilization & Export Traceability |
+The Django project is not created yet. Once the scaffold from Guide §5.1 is in place, the target
+startup procedure will be:
 
-## 🗓️ Structured 4-Week Engineering Roadmap (Nov 10 – Dec 8, 2026)
-
-- **Week 1 (Nov 10 – Nov 17, 2026) — Multi-Protocol Django 6 Foundation (`REST + GraphQL + gRPC + Auth`):**
-  Initialize PostgreSQL/Redis in `docker-compose.yml`, custom `StakeholderUser` (4 roles), UML Class & Sequence Diagrams, custom `SimpleJWT` endpoints, DRF ViewSets, Strawberry GraphQL with `DataLoader`, and `grpcio` telemetry ingestion.
-- **Week 2 (Nov 18 – Nov 24, 2026) — ML Anomaly Engine, Custom `FastMCP` Server & Modular Skills:**
-  Implement `IsolationForest` + Rolling Statistical Z-Score anomaly detection with Precision/Recall/F1 evaluation, expose domain `@mcp.resource()` and `@mcp.tool()` endpoints via `FastMCP`, and unit-test the 3 modular Agent Skills.
-- **Week 3 (Nov 25 – Dec 1, 2026) — Cyclic `LangGraph` Agent & ZK Solidity Settlement:**
-  Wire the 5-node `LangGraph` state machine with policy self-correction loops, compile and deploy `TuniSovereignLedger.sol` on local Foundry Anvil, and anchor salted SHA-256 / ZK range commitments via `Web3.py`.
-- **Week 4 (Dec 2 – Dec 8, 2026) — Command-Center Dashboard, `n8n` Boundary Automation & Packaging:**
-  Connect the live Governorate Map, Telemetry Charts, Agent Trace Console, and On-Chain Verifier in Streamlit/Web UI, import `workflows/tunisovereign_n8n_boundary_workflow.json`, record the 5–10 min `.mp4` demo video, and submit by **Tuesday, December 8, 2026 at 23:59**.
-
-## 📊 20-Point Evaluation Rubric Summary
-
-| Section | Architectural Component | Points |
-| :--- | :--- | :---: |
-| **1** | **UML Modeling & Architectural Justification** (Class Diagram, Sequence Diagram, Protocol & Agent Comparison Matrices) | **2.50** |
-| **2** | **Django 6 Core, Custom JWT RBAC & Multi-Protocol API Layer** (DRF REST + Strawberry GraphQL `DataLoader` + `gRPC` `proto3`) | **4.00** |
-| **3** | **ML Anomaly Detection & Forecasting Engine** (`IsolationForest` + Z-Score/Forecasting + Precision/Recall/F1 Benchmark) | **2.50** |
-| **4** | **Stateful `LangGraph` Loop, Custom `FastMCP` Server & 3 Modular Agent Skills** | **3.00** |
-| **5** | **Blockchain Smart Contract (`TuniSovereignLedger.sol`) & Zero-Knowledge Privacy Layer** | **1.50** |
-| **6** | **Programmatic Dashboard, Real-Time Streaming, `n8n` Boundary Automation & Docker Reproducibility** | **1.50** |
-| **7** | **Individual Oral Defense, Live Code Walkthrough & Q&A Mastery** | **5.00** |
-| **Total** | **DS2 Capstone Total Score** | **20.00** |
-
-## 📬 Submission Instructions
-
-Send a single compressed archive (`.zip` or `.rar`) to **`homework.isg@gmail.com`** before **Tuesday, December 8, 2026 at 23:59 (Tunis Time)** with the subject line:
-```text
-[DS2 2026-2027 - Track #X] Track Name - [Section: BI1/BI2/BIS1/BIS2] - [Group Number & Members]
+```bash
+cp .env.example .env        # never commit .env
+docker compose up --build
 ```
-Your archive must include:
-1. Complete executable source code, `docker-compose.yml`, and `README.md`.
-2. Presentation slides (`.pptx` and `.pdf`) containing your UML diagrams, architecture diagrams, comparison matrices, screenshots, and F1 evaluation metrics.
-3. A 5–10 minute end-to-end demonstration video (`.mp4`).
 
-**Author & Coordinator:** Chaouki Bayoudhi — Higher Institute of Management of Tunis (ISG Tunis), University of Tunis.
+Local development:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py runserver
+```
+
+## Tests
+
+Planned minimum test set (pytest / pytest-django):
+
+- Auth: citizen gets 403 on `/anomalies/`, auditor gets 200, JWT contains `role` and `municipality`.
+- GraphQL: nested municipality → proposals → votes keeps a constant SQL query count.
+- Quadratic funding: 100 × 1 TND = 9,900; 1 × 100 TND = 0; insufficient pool is normalized.
+- ML: F1 above a fixed threshold on the seeded simulated dataset.
+- ZK skill: same input + salt = same commitment; different salt = different commitment.
+- Contract: release succeeds; low progress is rejected; duplicate commitment/voter is rejected.
+- Agent: 25% lag routes through `replan` and sends no transaction.
+
+## Submission checklist
+
+- [ ] `docker compose up` works on a clean machine.
+- [ ] No `.env` or API keys in the archive (keep `.env.example`).
+- [ ] README rewritten for Baladiya-Trust.
+- [ ] UML diagrams match the real code.
+- [ ] Precision/Recall/F1 table from our own simulated data.
+- [ ] Slides `.pptx` and `.pdf`, video `.mp4` (5–10 minutes).
+- [ ] Archive sent before **December 8, 2026 at 23:59**.
+
+## Credits
+
+Based on the official DS2 starter template by **Chaouki Bayoudhi** (ISG Tunis):
+[`tunisovereign-ds2-starter-template`](https://github.com/ChaoukiBayoudhi/tunisovereign-ds2-starter-template).
+The original README is preserved in [`READMEBayoudhi.md`](./READMEBayoudhi.md).
