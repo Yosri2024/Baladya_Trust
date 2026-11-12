@@ -2,7 +2,7 @@ import pytest
 from rest_framework.test import APIClient, APIRequestFactory
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from backend.tunisovereign_core.api_rest import IsCitizen, IsMunicipalAuditor, IsNationalAdmin
+from backend.tunisovereign_core.permissions import IsCitizen, IsMunicipalAuditor, IsNationalAdmin
 from backend.tunisovereign_core.models import Municipality, Proposal, StakeholderUser
 
 

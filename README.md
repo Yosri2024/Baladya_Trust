@@ -86,7 +86,8 @@ baladiya-trust/
 ├── backend/tunisovereign_core/
 │   ├── models.py                   # Track 4 domain models
 │   ├── views.py                    # DRF ViewSets, JWT views, Darja webhook
-│   ├── api_rest.py                 # Serializers, JWT claims, permission classes
+│   ├── serializers.py              # DRF serializers and validation
+│   ├── permissions.py              # Role-based permission classes
 │   ├── schema_graphql.py           # Strawberry schema + real DataLoader
 │   └── ml_anomaly.py               # Sybil z-score, duplicate hash, lag rule + P/R/F1
 ├── config/                         # Django project (settings, ASGI, root URLs)

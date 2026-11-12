@@ -1,10 +1,9 @@
-"""Baladiya-Trust serializers, JWT claims and permission classes."""
+"""DRF serializers for Baladiya-Trust."""
 import hashlib
-import os
 
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError as DjangoValidationError
-from rest_framework import permissions, serializers
+from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from .models import (
@@ -23,15 +22,14 @@ VOTER_HASH_PREFIX = "0x"
 
 
 def citizen_resides_in(user, municipality) -> bool:
-    """Residency rule: a CITIZEN may only act in their own municipality.
-    Auditors, admins and the agent are not restricted."""
+    """A CITIZEN may only act in their own municipality."""
     if user.role != StakeholderUser.Role.CITIZEN:
         return True
     return user.municipality.strip().casefold() == municipality.name.strip().casefold()
 
 
 def derive_voter_hash(user) -> str:
-    """Deterministic pseudonymous commitment: never store the raw identity."""
+    """Pseudonymous commitment: never store the raw identity."""
     seed = user.residency_commitment or user.wallet_address or f"{user.username}:{user.pk}"
     if seed.startswith(VOTER_HASH_PREFIX) and len(seed) == 66:
         return seed
@@ -47,65 +45,6 @@ class BaladiyaTokenObtainPairSerializer(TokenObtainPairSerializer):
         token["wallet_address"] = user.wallet_address or ""
         token["preferred_dialect"] = user.preferred_dialect
         return token
-
-
-class IsCitizen(permissions.BasePermission):
-    """Only CITIZEN accounts may create proposals or votes."""
-
-    def has_permission(self, request, view):
-        return bool(
-            request.user
-            and request.user.is_authenticated
-            and request.user.role == StakeholderUser.Role.CITIZEN
-        )
-
-
-class IsMunicipalAuditor(permissions.BasePermission):
-    def has_permission(self, request, view):
-        return bool(
-            request.user
-            and request.user.is_authenticated
-            and request.user.role
-            in (StakeholderUser.Role.MUNICIPAL_AUDITOR, StakeholderUser.Role.NATIONAL_ADMIN)
-        )
-
-
-class IsNationalAdmin(permissions.BasePermission):
-    def has_permission(self, request, view):
-        return bool(
-            request.user
-            and request.user.is_authenticated
-            and request.user.role == StakeholderUser.Role.NATIONAL_ADMIN
-        )
-
-
-class IsAuditorOrAgent(permissions.BasePermission):
-    def has_permission(self, request, view):
-        return bool(
-            request.user
-            and request.user.is_authenticated
-            and request.user.role
-            in (
-                StakeholderUser.Role.MUNICIPAL_AUDITOR,
-                StakeholderUser.Role.NATIONAL_ADMIN,
-                StakeholderUser.Role.AGENT_SERVICE,
-            )
-        )
-
-
-class IsAgentOrN8NSecret(permissions.BasePermission):
-    """Accept an AGENT_SERVICE JWT or the n8n shared secret header."""
-
-    def has_permission(self, request, view):
-        secret = os.getenv("N8N_WEBHOOK_SECRET", "")
-        provided = request.headers.get("X-N8N-Secret", "")
-        if secret and provided and provided == secret:
-            return True
-        return bool(
-            request.user
-            and request.user.is_authenticated
-            and request.user.role in (StakeholderUser.Role.AGENT_SERVICE, StakeholderUser.Role.NATIONAL_ADMIN)
-        )
 
 
 class RegisterSerializer(serializers.Serializer):
@@ -196,10 +135,11 @@ class VoteSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         request = self.context.get("request")
         if request and request.user.is_authenticated:
-            if not citizen_resides_in(request.user, attrs["proposal"].municipality):
+            proposal = attrs["proposal"]
+            if not citizen_resides_in(request.user, proposal.municipality):
                 raise serializers.ValidationError("Vous ne pouvez voter que dans votre municipalité.")
             voter_hash = derive_voter_hash(request.user)
-            if Vote.objects.filter(proposal=attrs["proposal"], voter_hash=voter_hash).exists():
+            if Vote.objects.filter(proposal=proposal, voter_hash=voter_hash).exists():
                 raise serializers.ValidationError("Un seul vote par proposition et par citoyen.")
         return attrs
 

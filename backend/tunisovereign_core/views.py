@@ -6,13 +6,10 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from .api_rest import (
+from .permissions import IsAgentOrN8NSecret, IsAuditorOrAgent, IsCitizen, IsMunicipalAuditor
+from .serializers import (
     AnomalyEventSerializer,
     BaladiyaTokenObtainPairSerializer,
-    IsAgentOrN8NSecret,
-    IsAuditorOrAgent,
-    IsCitizen,
-    IsMunicipalAuditor,
     MilestoneReportSerializer,
     MunicipalitySerializer,
     OnChainZKReceiptSerializer,
