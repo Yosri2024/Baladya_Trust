@@ -107,12 +107,12 @@ baladiya-trust/
 
 ## Current status
 
-_Last updated: 2026-11-11_
+_Last updated: 2026-11-12_
 
 The repository now has a runnable Django foundation for Baladiya-Trust: Track 4 models are migrated
-on PostgreSQL, JWT authentication and role-based permissions are wired, REST + GraphQL + gRPC are
-live, the simulator/ML anomaly baseline produces labeled data, and `BaladiyaTreasuryMCP` exposes the
-treasury and audit domain. The remaining starter modules (skills, LangGraph, contracts, dashboard)
+on PostgreSQL (initial migration `0001_initial` applied and verified), JWT authentication and
+role-based permissions are wired, REST + GraphQL + gRPC are live, the simulator/ML anomaly baseline
+produces labeled data, and `BaladiyaTreasuryMCP` exposes the treasury and audit domain. The remaining starter modules (skills, LangGraph, contracts, dashboard)
 are still Track 1 stubs and are being adapted next.
 
 | Area | Status | Notes |
@@ -167,6 +167,17 @@ are still Track 1 stubs and are being adapted next.
 - [x] Create `baladiya.proto`, generate stubs, register `MilestoneIngestServiceServicer`.
 - [ ] Integration check: register, login, proposal, GraphQL query, gRPC packet. Tag `v0.1`.
 
+Week 1 verification:
+
+```bash
+source .venv/bin/activate
+docker compose up -d db redis
+python manage.py check
+python manage.py showmigrations tunisovereign_core
+```
+
+Expected: `System check identified no issues (0 silenced)` and `[X] 0001_initial`.
+
 ### Week 2 — Simulator, ML, MCP and skills (Nov 18–24)
 
 - [x] Simulator: proposals in French/Darja with duplicates, votes, S-curve milestones, fixed seed.
@@ -202,6 +213,9 @@ are still Track 1 stubs and are being adapted next.
 
 ## Getting started
 
+> Always use the project virtual environment. Running `manage.py` with the system Python can load a
+> broken global Django installation instead of the pinned project dependencies.
+
 ```bash
 cp .env.example .env        # never commit .env
 docker compose up -d db redis
@@ -209,9 +223,12 @@ docker compose up -d db redis
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
+python manage.py check
 python manage.py migrate
+python manage.py showmigrations tunisovereign_core
 python manage.py runserver
 ```
+
 
 Implemented endpoints so far:
 
