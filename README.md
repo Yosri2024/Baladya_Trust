@@ -74,6 +74,8 @@ Simulator --gRPC--> StreamMilestones --> Django (MilestoneReport)
 **Rule:** the LLM is used only for language tasks (Darja parsing, explanations, routing). Money,
 thresholds and hashing stay deterministic Python and are unit-tested.
 
+Detailed diagrams: [`docs/uml.md`](docs/uml.md) (class model and proposal-to-payout sequence).
+
 ## Repository structure
 
 ```text
@@ -92,6 +94,7 @@ baladiya-trust/
 │   ├── web3_zk_client.py           # Real Web3.py transactions (to replace simulated tx)
 │   └── deploy.py                   # Deploy script (to be created)
 ├── dashboard/                      # Streamlit command center
+├── docs/uml.md                     # Class and proposal-to-payout sequence diagrams
 ├── grpc_service/                   # gRPC servicer + generated stubs
 ├── mcp_server/                     # BaladiyaTreasuryMCP
 ├── protos/baladiya.proto           # Contract-first gRPC definition
@@ -139,17 +142,18 @@ are still Track 1 stubs and are being adapted next.
 | Dashboard (map, charts, agent trace, tx verifier) | Not started | Guide §5.12 |
 | Django Channels SSE/WebSocket + n8n alerts | Not started | Guide §5.12 |
 | Docker Compose: backend + grpc + corrected hosts | Not started | Guide §5.12 |
-| Tests, UML, slides, video, archive | In progress | 14 tests passing; UML, slides, video and archive pending |
+| Tests, UML, slides, video, archive | In progress | 18 tests passing; UML done; slides, video and archive pending |
 
 ### Verified locally
 
 | Check | Result |
 | :--- | :--- |
-| Pytest suite | **14 passed** |
+| Pytest suite | **18 passed** |
 | GraphQL nested query | 4 SQL queries for municipalities → proposals → votes → milestones |
 | gRPC ingest | `accepted_count=1`, lag anomaly `MEDIUM 0.25`, invalid HMAC → `PERMISSION_DENIED` |
 | Simulator (seed 42, 200 proposals) | 50 duplicates, 4,722 votes (400 sybil), 2,400 milestones (367 lagging, 4 reused photos) |
 | ML benchmark on simulator labels | Votes, progress lag, duplicate photos and combined: **P/R/F1 = 1.0** |
+| Week 1 integration | register `201` → token `200` → proposal `201` → GraphQL `200` → gRPC `accepted_count=1` |
 
 ## Roadmap
 
@@ -157,15 +161,15 @@ are still Track 1 stubs and are being adapted next.
 
 - [x] Create `config/` project, `apps.py`, `__init__.py` files, PostgreSQL settings.
 - [x] Rewrite `models.py` for Baladiya-Trust, run migrations.
-- [ ] Draw UML class diagram and proposal-to-payout sequence diagram.
+- [x] Draw UML class diagram and proposal-to-payout sequence diagram.
 - [x] Implement register/login/refresh JWT with `role`, `municipality`, `wallet_address`.
 - [x] Implement `IsCitizen`, `IsMunicipalAuditor`, `IsNationalAdmin`.
-- [ ] Test 200 vs 403 for each role.
+- [x] Test 200 vs 403 for each role.
 - [x] Implement DRF ViewSets for proposals, votes, milestones, anomalies, receipts.
 - [x] Fix Darja webhook authentication (no `AllowAny`).
 - [x] Implement nested GraphQL schema and real DataLoader; test query count.
 - [x] Create `baladiya.proto`, generate stubs, register `MilestoneIngestServiceServicer`.
-- [ ] Integration check: register, login, proposal, GraphQL query, gRPC packet. Tag `v0.1`.
+- [x] Integration check: register, login, proposal, GraphQL query, gRPC packet. Tag `v0.1`.
 
 Week 1 verification:
 
@@ -278,13 +282,15 @@ dashboard services will be added in week 4 (Guide §5.12).
 
 ## Tests
 
-Run the tests with `pytest` (**14 tests passing**):
+Run the tests with `pytest` (**18 tests passing**):
 
 - `test_graphql.py` — DataLoader batching and nested query count.
 - `test_ingestion.py` — HMAC signature and progress-lag rule.
 - `test_ml_anomaly.py` — sybil burst, normal traffic, duplicate photo and lag severity.
 - `test_simulator.py` — fixed seed reproducibility, labels and benchmark metrics.
 - `test_mcp.py` — quadratic funding, treasury snapshot, audit and tranche eligibility.
+- `test_permissions.py` — 200/403 matrix for citizen, auditor, national admin and agent.
+- `test_integration.py` — register → login → proposal → GraphQL → signed gRPC packet.
 
 Planned minimum test set (pytest / pytest-django):
 
@@ -301,7 +307,7 @@ Planned minimum test set (pytest / pytest-django):
 - [ ] `docker compose up` works on a clean machine.
 - [ ] No `.env` or API keys in the archive (keep `.env.example`).
 - [ ] README rewritten for Baladiya-Trust.
-- [ ] UML diagrams match the real code.
+- [x] UML diagrams match the real code (`docs/uml.md`).
 - [ ] Precision/Recall/F1 table from our own simulated data.
 - [ ] Slides `.pptx` and `.pdf`, video `.mp4` (5–10 minutes).
 - [ ] Archive sent before **December 8, 2026 at 23:59**.
