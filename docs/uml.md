@@ -101,10 +101,12 @@ classDiagram
     AgentLoopExecution "1" --> "0..1" OnChainZKReceipt : anchors
     Tranche "0..1" --> "*" OnChainZKReceipt : settles
 
-    note for Proposal "project_code is unique"
+    note for StakeholderUser "Extends AbstractUser; roles: CITIZEN, MUNICIPAL_AUDITOR, NATIONAL_ADMIN, AGENT_SERVICE"
+    note for Proposal "project_code is unique; categories: ROAD, LIGHTING, SCHOOL, WASTE; statuses: SUBMITTED, MERGED, FUNDED, IN_PROGRESS, COMPLETED, BLOCKED"
     note for Vote "UniqueConstraint(proposal, voter_hash)"
     note for Tranche "UniqueConstraint(proposal, index)"
-    note for OnChainZKReceipt "zk_commitment_hash and tx_hash are unique"
+    note for AnomalyEvent "Kinds: SYBIL_VOTES, PROGRESS_LAG, DUPLICATE_PHOTO; severities: LOW, MEDIUM, CRITICAL"
+    note for OnChainZKReceipt "zk_commitment_hash and tx_hash are unique; tranche is optional"
 ```
 
 ## Proposal-to-payout sequence
@@ -113,6 +115,7 @@ classDiagram
 sequenceDiagram
     autonumber
     actor C as Citizen
+    actor AUD as Municipal Auditor
     participant API as Django REST / GraphQL
     participant DB as PostgreSQL
     participant G as gRPC Ingest
@@ -153,6 +156,9 @@ sequenceDiagram
     M-->>A: Eligible or blocking reasons
 
     alt eligible and human approval
+        API-->>AUD: Tranche pending approval
+        AUD->>API: Approve tranche
+        API->>A: Resume graph after interrupt
         A->>Z: Create salted ZK commitment
         Z-->>A: zk_commitment_hash
         A->>W: releaseTranche(proposal, index, commitment)
