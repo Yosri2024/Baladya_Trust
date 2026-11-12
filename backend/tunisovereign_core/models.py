@@ -75,6 +75,7 @@ class Vote(models.Model):
         indexes = [models.Index(fields=["proposal", "-created_at"])]
 
 
+# Rôle : l'entrepreneur déclare l'avancement d'un chantier via un rapport de jalon (streaming gRPC).
 class MilestoneReport(models.Model):
     proposal = models.ForeignKey(Proposal, on_delete=models.CASCADE, related_name="milestones")
     timestamp = models.DateTimeField(db_index=True)
@@ -89,6 +90,7 @@ class MilestoneReport(models.Model):
         indexes = [models.Index(fields=["proposal", "-timestamp"])]
 
 
+# Rôle : découpe le budget d'un projet en tranches de paiement (ex. 4 tranches de 25 %).
 class Tranche(models.Model):
     proposal = models.ForeignKey(Proposal, on_delete=models.CASCADE, related_name="tranches")
     index = models.PositiveSmallIntegerField()
@@ -99,6 +101,7 @@ class Tranche(models.Model):
         constraints = [models.UniqueConstraint(fields=["proposal", "index"], name="uniq_tranche")]
 
 
+# Rôle : trace les anomalies détectées par le module ML (IsolationForest + règles déterministes).
 class AnomalyEvent(models.Model):
     class Kind(models.TextChoices):
         SYBIL_VOTES = "SYBIL_VOTES", "Votes sybil"
@@ -117,6 +120,7 @@ class AnomalyEvent(models.Model):
     isolation_forest_score = models.FloatField()
 
 
+# Rôle : audit de chaque exécution du graphe LangGraph. Permet de tracer "comment l'IA a raisonné".
 class AgentLoopExecution(models.Model):
     thread_id = models.CharField(max_length=64, db_index=True)
     trigger_source = models.CharField(max_length=64)
@@ -129,6 +133,7 @@ class AgentLoopExecution(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
 
+# Rôle : preuve cryptographique d'une action écrite on-chain (Anvil / Polygon Amoy).
 class OnChainZKReceipt(models.Model):
     agent_execution = models.OneToOneField(
         AgentLoopExecution, on_delete=models.CASCADE, related_name="zk_receipt"
