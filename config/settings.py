@@ -102,7 +102,16 @@ AUTH_USER_MODEL = "tunisovereign_core.StakeholderUser"
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "rest_framework_simplejwt.authentication.JWTAuthentication",  #c'est LA ligne qui fait que Django lit le header Authorization: Bearer <token>.
+
+        #1. Lit header Authorization
+        #2. Vérifie préfixe "Bearer "
+        #3. Extrait le token
+        #4. Vérifie signature avec SECRET_KEY → si invalide → 401
+        #5. Vérifie exp > maintenant → si expiré → 401
+        #6. Charge StakeholderUser(user_id)
+        #7. request.user = utilisateur
+        #8. request.auth = payload du token
     ],
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",

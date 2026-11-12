@@ -13,7 +13,7 @@ def health(request):
 
 class BaladiyaGraphQLView(AsyncGraphQLView):
     async def get_context(self, request, response):
-        return {"request": request, "response": response, **build_loaders()}
+        return {"request": request, "response": response, **build_loaders()} # ** : déballage / unpacking
 
 
 urlpatterns = [

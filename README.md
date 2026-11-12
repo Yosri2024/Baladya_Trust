@@ -115,7 +115,8 @@ _Last updated: 2026-11-12_
 The repository now has a runnable Django foundation for Baladiya-Trust: Track 4 models are migrated
 on PostgreSQL (initial migration `0001_initial` applied and verified), JWT authentication and
 role-based permissions are wired, REST + GraphQL + gRPC are live, the simulator/ML anomaly baseline
-produces labeled data, and `BaladiyaTreasuryMCP` exposes the treasury and audit domain. The remaining starter modules (skills, LangGraph, contracts, dashboard)
+produces labeled data, and `BaladiyaTreasuryMCP` exposes the treasury and audit domain. Week 1 is
+complete and tagged `v0.1`. The remaining starter modules (skills, LangGraph, contracts, dashboard)
 are still Track 1 stubs and are being adapted next.
 
 | Area | Status | Notes |
@@ -157,7 +158,7 @@ are still Track 1 stubs and are being adapted next.
 
 ## Roadmap
 
-### Week 1 — Django foundation and three APIs (Nov 10–17)
+### Week 1 — Django foundation and three APIs (Nov 10–17) — complete
 
 - [x] Create `config/` project, `apps.py`, `__init__.py` files, PostgreSQL settings.
 - [x] Rewrite `models.py` for Baladiya-Trust, run migrations.
@@ -169,7 +170,7 @@ are still Track 1 stubs and are being adapted next.
 - [x] Fix Darja webhook authentication (no `AllowAny`).
 - [x] Implement nested GraphQL schema and real DataLoader; test query count.
 - [x] Create `baladiya.proto`, generate stubs, register `MilestoneIngestServiceServicer`.
-- [x] Integration check: register, login, proposal, GraphQL query, gRPC packet. Tag `v0.1`.
+- [x] Integration check: register, login, proposal, GraphQL query, gRPC packet. Tag `v0.1` created and pushed.
 
 Week 1 verification:
 
