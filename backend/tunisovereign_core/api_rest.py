@@ -77,8 +77,6 @@ class IsCitizen(permissions.BasePermission):
 
 
 class IsMunicipalAuditor(permissions.BasePermission):
-    """MUNICIPAL_AUDITOR and NATIONAL_ADMIN; admins inherit auditor rights."""
-
     def has_permission(self, request, view):
         return bool(
             request.user
