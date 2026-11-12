@@ -88,13 +88,13 @@ baladiya-trust/
 │   ├── views.py                    # DRF ViewSets, JWT views, Darja webhook
 │   ├── serializers.py              # DRF serializers and validation
 │   ├── permissions.py              # Role-based permission classes
+│   ├── urls.py                     # REST router and auth routes
 │   ├── schema_graphql.py           # Strawberry schema + real DataLoader
 │   └── ml_anomaly.py               # Sybil z-score, duplicate hash, lag rule + P/R/F1
 ├── config/                         # Django project (settings, ASGI, root URLs)
 ├── contracts/
-│   ├── BaladiyaLedger.sol          # Tranche release + soulbound voter registry
-│   ├── web3_zk_client.py           # Real Web3.py transactions (to replace simulated tx)
-│   └── deploy.py                   # Deploy script (to be created)
+│   ├── TuniSovereignLedger.sol     # Starter ledger; BaladiyaLedger.sol planned
+│   └── web3_zk_client.py           # Web3.py client; real transactions pending
 ├── dashboard/                      # Streamlit command center
 ├── docs/uml.md                     # Class and proposal-to-payout sequence diagrams
 ├── grpc_service/                   # gRPC servicer + generated stubs
