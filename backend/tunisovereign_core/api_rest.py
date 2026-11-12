@@ -66,11 +66,19 @@ class BaladiyaTokenObtainPairView(TokenObtainPairView):
 
 
 class IsCitizen(permissions.BasePermission):
+    """Only CITIZEN accounts may create proposals or votes."""
+
     def has_permission(self, request, view):
-        return bool(request.user and request.user.is_authenticated)
+        return bool(
+            request.user
+            and request.user.is_authenticated
+            and request.user.role == StakeholderUser.Role.CITIZEN
+        )
 
 
 class IsMunicipalAuditor(permissions.BasePermission):
+    """MUNICIPAL_AUDITOR and NATIONAL_ADMIN; admins inherit auditor rights."""
+
     def has_permission(self, request, view):
         return bool(
             request.user
@@ -282,13 +290,13 @@ class AgentLoopExecutionSerializer(serializers.ModelSerializer):
 class MunicipalityViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Municipality.objects.all().order_by("name")
     serializer_class = MunicipalitySerializer
-    permission_classes = [IsCitizen]
+    permission_classes = [permissions.IsAuthenticated]
     filterset_fields = ["governorate"]
 
 
 class ProposalViewSet(viewsets.ModelViewSet):
     serializer_class = ProposalSerializer
-    permission_classes = [IsCitizen]
+    permission_classes = [permissions.IsAuthenticated]
     filterset_fields = ["municipality", "status", "category", "cluster_id"]
     search_fields = ["project_code", "title", "text"]
     ordering_fields = ["created_at", "estimated_cost_tnd"]
@@ -306,16 +314,24 @@ class ProposalViewSet(viewsets.ModelViewSet):
         serializer.save(author=self.request.user)
 
     def get_permissions(self):
+        if self.action == "create":
+            return [IsCitizen()]
         if self.action in ("update", "partial_update", "destroy"):
             return [IsMunicipalAuditor()]
-        return [IsCitizen()]
+        return [permissions.IsAuthenticated()]
 
 
 class VoteViewSet(viewsets.ModelViewSet):
     queryset = Vote.objects.select_related("proposal").order_by("-created_at")
     serializer_class = VoteSerializer
-    permission_classes = [IsCitizen]
+    permission_classes = [permissions.IsAuthenticated]
     filterset_fields = ["proposal"]
+    http_method_names = ["get", "post", "head", "options"]
+
+    def get_permissions(self):
+        if self.action == "create":
+            return [IsCitizen()]
+        return [permissions.IsAuthenticated()]
 
     def get_queryset(self):
         user = self.request.user
@@ -333,25 +349,25 @@ class VoteViewSet(viewsets.ModelViewSet):
 class MilestoneReportViewSet(viewsets.ModelViewSet):
     queryset = MilestoneReport.objects.select_related("proposal").order_by("-timestamp")
     serializer_class = MilestoneReportSerializer
-    permission_classes = [IsCitizen]
+    permission_classes = [permissions.IsAuthenticated]
     filterset_fields = ["proposal"]
 
     def get_permissions(self):
         if self.action in ("create", "update", "partial_update", "destroy"):
             return [IsAuditorOrAgent()]
-        return [IsCitizen()]
+        return [permissions.IsAuthenticated()]
 
 
 class TrancheViewSet(viewsets.ModelViewSet):
     queryset = Tranche.objects.select_related("proposal").order_by("proposal", "index")
     serializer_class = TrancheSerializer
-    permission_classes = [IsCitizen]
+    permission_classes = [permissions.IsAuthenticated]
     filterset_fields = ["proposal"]
 
     def get_permissions(self):
         if self.action in ("create", "update", "partial_update", "destroy"):
             return [IsMunicipalAuditor()]
-        return [IsCitizen()]
+        return [permissions.IsAuthenticated()]
 
 
 class AnomalyEventViewSet(viewsets.ReadOnlyModelViewSet):
@@ -366,7 +382,7 @@ class OnChainZKReceiptViewSet(viewsets.ReadOnlyModelViewSet):
         "-block_number"
     )
     serializer_class = OnChainZKReceiptSerializer
-    permission_classes = [IsCitizen]
+    permission_classes = [permissions.IsAuthenticated]
     filterset_fields = ["tranche", "is_verified_on_chain"]
 
 

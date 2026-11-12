@@ -144,13 +144,13 @@ are still Track 1 stubs and are being adapted next.
 | Dashboard (map, charts, agent trace, tx verifier) | Not started | Guide §5.12 |
 | Django Channels SSE/WebSocket + n8n alerts | Not started | Guide §5.12 |
 | Docker Compose: backend + grpc + corrected hosts | Not started | Guide §5.12 |
-| Tests, UML, slides, video, archive | In progress | 33 tests passing; UML done; slides, video and archive pending |
+| Tests, UML, slides, video, archive | In progress | 37 tests passing; UML done; slides, video and archive pending |
 
 ### Verified locally
 
 | Check | Result |
 | :--- | :--- |
-| Pytest suite | **33 passed** |
+| Pytest suite | **37 passed** |
 | GraphQL nested query | 5 SQL queries (1 auth + 4 batched) for municipalities → proposals → votes → milestones |
 | gRPC ingest | `accepted_count=1`, lag anomaly `MEDIUM 0.25`, invalid HMAC → `PERMISSION_DENIED` |
 | Simulator (seed 42, 200 proposals) | 50 duplicates, 4,722 votes (400 sybil), 2,400 milestones (367 lagging, 4 reused photos) |
@@ -244,8 +244,11 @@ Implemented endpoints so far:
 | `POST` | `/api/auth/register/` | Public (creates a `CITIZEN`) |
 | `POST` | `/api/auth/token/` | Username + password |
 | `POST` | `/api/auth/token/refresh/` | Refresh token |
-| `CRUD` | `/api/v1/municipalities/`, `/proposals/`, `/votes/`, `/milestones/`, `/tranches/` | JWT |
-| `GET` | `/api/v1/anomalies/`, `/zk-receipts/` | JWT + role |
+| `GET` | `/api/v1/municipalities/`, `/proposals/`, `/votes/`, `/milestones/`, `/tranches/`, `/zk-receipts/` | JWT |
+| `POST` | `/api/v1/proposals/`, `/votes/` | `CITIZEN` |
+| `POST` | `/api/v1/milestones/`, `/tranches/` | Auditor/admin (`AGENT_SERVICE` also for milestones) |
+| `PATCH` | `/api/v1/proposals/{id}/` | Auditor/admin |
+| `GET` | `/api/v1/anomalies/` | Auditor/admin |
 | `POST` | `/api/v1/darja-intent/` | `AGENT_SERVICE` JWT or `X-N8N-Secret` |
 
 The gRPC `MilestoneIngestService` listens on port `50051`:
@@ -284,7 +287,7 @@ dashboard services will be added in week 4 (Guide §5.12).
 
 ## Tests
 
-Run the tests with `pytest` (**33 tests passing**):
+Run the tests with `pytest` (**37 tests passing**):
 
 - `test_graphql.py` — DataLoader batching and nested query count.
 - `test_ingestion.py` — HMAC signature and progress-lag rule.
