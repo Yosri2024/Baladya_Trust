@@ -6,6 +6,7 @@ import pytest
 from django.db import connection
 from django.test import Client
 from django.test.utils import CaptureQueriesContext
+from rest_framework_simplejwt.tokens import AccessToken
 
 from backend.tunisovereign_core.models import (
     AgentLoopExecution,
@@ -17,6 +18,16 @@ from backend.tunisovereign_core.models import (
     Tranche,
     Vote,
 )
+
+
+@pytest.fixture
+def auditor_headers(db):
+    auditor = StakeholderUser.objects.create_user(
+        username="graphql-auditor",
+        password="Auditor-pass-2026!",
+        role=StakeholderUser.Role.MUNICIPAL_AUDITOR,
+    )
+    return {"HTTP_AUTHORIZATION": f"Bearer {AccessToken.for_user(auditor)}"}
 
 
 @pytest.fixture
@@ -94,7 +105,7 @@ def graphql_data(db):
 
 
 @pytest.mark.django_db
-def test_nested_query_is_batched_under_four_queries(graphql_data):
+def test_nested_query_is_batched_under_four_queries(graphql_data, auditor_headers):
     query = """
     query {
       municipalities {
@@ -115,12 +126,14 @@ def test_nested_query_is_batched_under_four_queries(graphql_data):
             "/graphql/",
             data=json.dumps({"query": query}),
             content_type="application/json",
+            **auditor_headers,
         )
 
     assert response.status_code == 200
     body = response.json()
     assert body.get("errors") is None
-    assert len(captured.captured_queries) <= 4
+    # 1 query to load the authenticated user + 4 batched data queries (no N+1)
+    assert len(captured.captured_queries) <= 5
 
     municipalities = {row["name"]: row for row in body["data"]["municipalities"]}
     assert set(municipalities) == {"Kasserine", "Sidi Bouzid"}
@@ -138,7 +151,7 @@ def test_nested_query_is_batched_under_four_queries(graphql_data):
 
 
 @pytest.mark.django_db
-def test_receipts_are_loaded_through_tranches(graphql_data):
+def test_receipts_are_loaded_through_tranches(graphql_data, auditor_headers):
     query = """
     query {
       proposal(projectCode: "KAS-ROAD-001") {
@@ -150,6 +163,7 @@ def test_receipts_are_loaded_through_tranches(graphql_data):
         "/graphql/",
         data=json.dumps({"query": query}),
         content_type="application/json",
+        **auditor_headers,
     )
 
     assert response.status_code == 200

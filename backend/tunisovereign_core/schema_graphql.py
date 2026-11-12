@@ -3,6 +3,7 @@ from datetime import datetime
 from typing import Optional
 
 import strawberry
+from strawberry.permission import BasePermission
 from asgiref.sync import sync_to_async
 from django.db.models import Count, Sum
 from strawberry.dataloader import DataLoader
@@ -16,6 +17,30 @@ from .models import (
     Tranche,
     Vote,
 )
+
+
+MAX_LIST = 200
+
+
+def _clamp(limit: int) -> int:
+    return max(1, min(limit, MAX_LIST))
+
+
+class IsAuthenticated(BasePermission):
+    message = "Authentication required"
+
+    def has_permission(self, source, info, **kwargs) -> bool:
+        return info.context.get("user") is not None
+
+
+class IsAuditor(BasePermission):
+    """Raw votes (voter hashes) and agent traces are for auditors/admins only."""
+
+    message = "Auditor role required"
+
+    def has_permission(self, source, info, **kwargs) -> bool:
+        user = info.context.get("user")
+        return bool(user and user.role in ("MUNICIPAL_AUDITOR", "NATIONAL_ADMIN"))
 
 
 @sync_to_async
@@ -189,15 +214,15 @@ class ProposalType:
             raised_tnd=getattr(proposal, "raised_tnd", 0.0) or 0.0,
         )
 
-    @strawberry.field
-    async def votes(self, info: strawberry.Info) -> list[VoteType]:
+    @strawberry.field(permission_classes=[IsAuditor])
+    async def votes(self, info: strawberry.Info, limit: int = 50) -> list[VoteType]:
         rows = await info.context["votes_loader"].load(self.id)
-        return [VoteType.from_model(row) for row in rows]
+        return [VoteType.from_model(row) for row in rows[: _clamp(limit)]]
 
     @strawberry.field
-    async def milestones(self, info: strawberry.Info) -> list[MilestoneType]:
+    async def milestones(self, info: strawberry.Info, limit: int = 50) -> list[MilestoneType]:
         rows = await info.context["milestones_loader"].load(self.id)
-        return [MilestoneType.from_model(row) for row in rows]
+        return [MilestoneType.from_model(row) for row in rows[: _clamp(limit)]]
 
     @strawberry.field
     async def tranches(self, info: strawberry.Info) -> list[TrancheType]:
@@ -226,9 +251,9 @@ class MunicipalityType:
         )
 
     @strawberry.field
-    async def proposals(self, info: strawberry.Info) -> list[ProposalType]:
+    async def proposals(self, info: strawberry.Info, limit: int = 50) -> list[ProposalType]:
         rows = await info.context["proposals_loader"].load(self.id)
-        return [ProposalType.from_model(row) for row in rows]
+        return [ProposalType.from_model(row) for row in rows[: _clamp(limit)]]
 
 
 @strawberry.type
@@ -295,26 +320,31 @@ def _get_agent_executions(thread_id):
 
 @strawberry.type
 class Query:
-    @strawberry.field
-    async def municipalities(self, governorate: Optional[str] = None) -> list[MunicipalityType]:
-        return await _get_municipalities(governorate)
+    @strawberry.field(permission_classes=[IsAuthenticated])
+    async def municipalities(
+        self, governorate: Optional[str] = None, limit: int = 50
+    ) -> list[MunicipalityType]:
+        return (await _get_municipalities(governorate))[: _clamp(limit)]
 
-    @strawberry.field
+    @strawberry.field(permission_classes=[IsAuthenticated])
     async def proposals(
         self,
         municipality_id: Optional[str] = None,
         status: Optional[str] = None,
         category: Optional[str] = None,
+        limit: int = 50,
     ) -> list[ProposalType]:
-        return await _get_proposals(municipality_id, status, category)
+        return (await _get_proposals(municipality_id, status, category))[: _clamp(limit)]
 
-    @strawberry.field
+    @strawberry.field(permission_classes=[IsAuthenticated])
     async def proposal(self, project_code: str) -> Optional[ProposalType]:
         return await _get_proposal(project_code)
 
-    @strawberry.field
-    async def agent_executions(self, thread_id: Optional[str] = None) -> list[AgentExecutionType]:
-        return await _get_agent_executions(thread_id)
+    @strawberry.field(permission_classes=[IsAuditor])
+    async def agent_executions(
+        self, thread_id: Optional[str] = None, limit: int = 50
+    ) -> list[AgentExecutionType]:
+        return (await _get_agent_executions(thread_id))[: _clamp(limit)]
 
 
 def build_loaders() -> dict:

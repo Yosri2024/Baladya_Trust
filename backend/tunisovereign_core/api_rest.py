@@ -10,6 +10,8 @@ Routes:
 import hashlib
 import os
 
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError as DjangoValidationError
 from rest_framework import permissions, serializers, status, viewsets
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
@@ -30,6 +32,14 @@ from .models import (
 )
 
 VOTER_HASH_PREFIX = "0x"
+
+
+def citizen_resides_in(user, municipality) -> bool:
+    """Residency rule: a CITIZEN may only act in their own municipality.
+    Auditors, admins and the agent are not restricted."""
+    if user.role != StakeholderUser.Role.CITIZEN:
+        return True
+    return user.municipality.strip().casefold() == municipality.name.strip().casefold()
 
 
 def derive_voter_hash(user) -> str:
@@ -122,6 +132,14 @@ class RegisterSerializer(serializers.Serializer):
             raise serializers.ValidationError("Ce nom d'utilisateur existe déjà.")
         return value
 
+    def validate(self, attrs):
+        candidate = StakeholderUser(username=attrs["username"], email=attrs.get("email", ""))
+        try:
+            validate_password(attrs["password"], user=candidate)
+        except DjangoValidationError as exc:
+            raise serializers.ValidationError({"password": list(exc.messages)})
+        return attrs
+
     def create(self, validated_data):
         return StakeholderUser.objects.create_user(
             role=StakeholderUser.Role.CITIZEN,
@@ -183,6 +201,12 @@ class ProposalSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Le coût estimé doit être positif.")
         return value
 
+    def validate_municipality(self, value):
+        request = self.context.get("request")
+        if request and request.user.is_authenticated and not citizen_resides_in(request.user, value):
+            raise serializers.ValidationError("Vous ne pouvez proposer que dans votre municipalité.")
+        return value
+
 
 class VoteSerializer(serializers.ModelSerializer):
     voter_hash = serializers.CharField(read_only=True)
@@ -200,6 +224,8 @@ class VoteSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         request = self.context.get("request")
         if request and request.user.is_authenticated:
+            if not citizen_resides_in(request.user, attrs["proposal"].municipality):
+                raise serializers.ValidationError("Vous ne pouvez voter que dans votre municipalité.")
             voter_hash = derive_voter_hash(request.user)
             if Vote.objects.filter(proposal=attrs["proposal"], voter_hash=voter_hash).exists():
                 raise serializers.ValidationError("Un seul vote par proposition et par citoyen.")

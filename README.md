@@ -116,7 +116,8 @@ The repository now has a runnable Django foundation for Baladiya-Trust: Track 4 
 on PostgreSQL (initial migration `0001_initial` applied and verified), JWT authentication and
 role-based permissions are wired, REST + GraphQL + gRPC are live, the simulator/ML anomaly baseline
 produces labeled data, and `BaladiyaTreasuryMCP` exposes the treasury and audit domain. Week 1 is
-complete and tagged `v0.1`. The remaining starter modules (skills, LangGraph, contracts, dashboard)
+complete and tagged `v0.1`; the review fixes add GraphQL JWT auth, auditor-only raw votes,
+password validation, municipality residency checks and REST pagination. The remaining starter modules (skills, LangGraph, contracts, dashboard)
 are still Track 1 stubs and are being adapted next.
 
 | Area | Status | Notes |
@@ -132,7 +133,7 @@ are still Track 1 stubs and are being adapted next.
 | JWT auth + 4-role RBAC + register | Done | Guide §5.3; claims `role`, `municipality`, `wallet_address` |
 | REST ViewSets, filters, validation | Done | Guide §5.3; django-filter, search and ordering |
 | Darja webhook authentication | Done | JWT (`AGENT_SERVICE`) or `X-N8N-Secret` header |
-| Strawberry GraphQL + real DataLoader | Done | Guide §5.4; nested query ≤ 4 SQL, pytest |
+| Strawberry GraphQL + real DataLoader | Done | Guide §5.4; nested query ≤ 5 SQL (1 auth + 4 batched), pytest |
 | gRPC `baladiya.proto` + registered servicer | Done | Guide §5.5; HMAC, ML lag rule, agent hook |
 | Simulator + anomaly injection + labels CSV | Done | Guide §5.6; fixed seed, FR/Darja duplicates, sybil bursts, S-curve, reused photos |
 | ML sybil/progress/photo detectors + P/R/F1 | Done | Guide §5.7; z-score sybil, duplicate hash, rolling lag; P/R/F1 = 1.0 on synthetic data |
@@ -143,14 +144,14 @@ are still Track 1 stubs and are being adapted next.
 | Dashboard (map, charts, agent trace, tx verifier) | Not started | Guide §5.12 |
 | Django Channels SSE/WebSocket + n8n alerts | Not started | Guide §5.12 |
 | Docker Compose: backend + grpc + corrected hosts | Not started | Guide §5.12 |
-| Tests, UML, slides, video, archive | In progress | 18 tests passing; UML done; slides, video and archive pending |
+| Tests, UML, slides, video, archive | In progress | 33 tests passing; UML done; slides, video and archive pending |
 
 ### Verified locally
 
 | Check | Result |
 | :--- | :--- |
-| Pytest suite | **18 passed** |
-| GraphQL nested query | 4 SQL queries for municipalities → proposals → votes → milestones |
+| Pytest suite | **33 passed** |
+| GraphQL nested query | 5 SQL queries (1 auth + 4 batched) for municipalities → proposals → votes → milestones |
 | gRPC ingest | `accepted_count=1`, lag anomaly `MEDIUM 0.25`, invalid HMAC → `PERMISSION_DENIED` |
 | Simulator (seed 42, 200 proposals) | 50 duplicates, 4,722 votes (400 sybil), 2,400 milestones (367 lagging, 4 reused photos) |
 | ML benchmark on simulator labels | Votes, progress lag, duplicate photos and combined: **P/R/F1 = 1.0** |
@@ -283,7 +284,7 @@ dashboard services will be added in week 4 (Guide §5.12).
 
 ## Tests
 
-Run the tests with `pytest` (**18 tests passing**):
+Run the tests with `pytest` (**33 tests passing**):
 
 - `test_graphql.py` — DataLoader batching and nested query count.
 - `test_ingestion.py` — HMAC signature and progress-lag rule.
@@ -292,6 +293,7 @@ Run the tests with `pytest` (**18 tests passing**):
 - `test_mcp.py` — quadratic funding, treasury snapshot, audit and tranche eligibility.
 - `test_permissions.py` — 200/403 matrix for citizen, auditor, national admin and agent.
 - `test_integration.py` — register → login → proposal → GraphQL → signed gRPC packet.
+- `test_security_week1.py` — GraphQL auth, password validation, residency and pagination regressions.
 
 Planned minimum test set (pytest / pytest-django):
 
