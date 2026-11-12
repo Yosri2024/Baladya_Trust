@@ -85,7 +85,8 @@ baladiya-trust/
 │   └── skills/                     # 3 modular skills + pytest
 ├── backend/tunisovereign_core/
 │   ├── models.py                   # Track 4 domain models
-│   ├── api_rest.py                 # DRF ViewSets, JWT auth, Darja webhook
+│   ├── views.py                    # DRF ViewSets, JWT views, Darja webhook
+│   ├── api_rest.py                 # Serializers, JWT claims, permission classes
 │   ├── schema_graphql.py           # Strawberry schema + real DataLoader
 │   └── ml_anomaly.py               # Sybil z-score, duplicate hash, lag rule + P/R/F1
 ├── config/                         # Django project (settings, ASGI, root URLs)
